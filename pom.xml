@@ -1,0 +1,88 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.dscalzi</groupId>
+  <artifactId>ExplosiveElytras</artifactId>
+  <version>0.1</version>
+  <name>ExplosiveElytras</name>
+  <description>High speed elytra collisions cause explosions.</description>
+  
+  <developers>
+  	<developer>
+         <name>Daniel Scalzi (TheKraken7)</name>
+         <roles>
+           <role>Project Lead</role>
+         </roles>
+      </developer>
+  </developers>
+  
+  <build>
+    <defaultGoal>package</defaultGoal>
+ 	<finalName>ExplosiveElytras</finalName>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+       <resource>
+            <targetPath>.</targetPath>
+            <directory>${basedir}/src/com/dscalzi/explosiveelytras/resources/</directory>
+        </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <minimizeJar>true</minimizeJar>
+              <finalName>ExplosiveElytras</finalName>
+              <relocations>
+              	<relocation>
+              		<pattern>org.bstats</pattern>
+              		<shadedPattern>lib.org.bstats</shadedPattern>
+              	</relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <repositories>
+  	<repository>
+		<id>spigot-repo</id>
+		<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+	</repository>
+	<repository>
+  		<id>bstats-repo</id>
+  		<url>http://repo.bstats.org/content/repositories/releases/</url>
+	</repository>
+  </repositories>
+  
+  <dependencies>
+    <dependency>
+        <groupId>org.spigotmc</groupId>
+        <artifactId>spigot-api</artifactId>
+        <version>1.11.2-R0.1-SNAPSHOT</version>
+        <scope>provided</scope>
+     </dependency>
+     <dependency>
+  		<groupId>org.bstats</groupId>
+ 		<artifactId>bstats-bukkit</artifactId>
+  		<version>1.1</version>
+	</dependency>
+  </dependencies>
+</project>

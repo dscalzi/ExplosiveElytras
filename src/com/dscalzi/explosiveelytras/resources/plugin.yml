@@ -1,0 +1,13 @@
+author: Daniel Scalzi
+description: High speed elytra collisions cause explosions.
+main: com.dscalzi.explosiveelytras.ExplosiveElytras
+name: ExplosiveElytras
+version: 0.1
+commands:
+  explosiveelytras:
+    description: Main plugin command.
+permissions:
+  explosiveelytras.*:
+    children:
+      explosiveelytras.explode: true
+      explosiveelytras.reload: true

@@ -1,0 +1,47 @@
+#-----------------------------------------------
+#          Explosive Elytras Config
+#-----------------------------------------------
+
+#DO NOT CHANGE THIS VALUE.
+#CHANGING IT COULD RESULT IN DATA LOSS.
+ConfigVersion: 1.0
+
+#--------------[General Settings]---------------
+general_settings:
+
+  # A player must have at least one of the following
+  # in their inventory at the time of crash in order
+  # to explode. Syntax is [id]:[data]|[amount]
+  # Ex. 46:0|1 = 1 tnt, 289:0|64 = 64 gunpowder
+  required_items:
+    - "46:0|1"
+    
+  # Should the matching required item be consumed during
+  # the explosion.
+  consume_on_explosion: true
+    
+  death_message: "{0} had an explosive landing"
+
+#---------[Horizontal Impact Settings]----------
+# Settings for when a player crashes into something
+# horizontally, like a wall.
+horizontal_impact_settings:
+
+  enabled: true
+  fireworks_on_crash: true
+  
+  # Minimum damage on the player to cause an explosion.
+  # 1 = .5 hearts, 2 = 1 heart, 3 = 1.5 hearts, etc.
+  minimum_damage_value: 1
+  
+#---------[Vertical Impact Settings]----------
+# Settings for when a player crashes into something
+# verically, like the ground.
+vertical_impact_settings:
+
+  enabled: true
+  fireworks_on_crash: true
+  
+  # Minimum damage on the player to cause an explosion.
+  # 1 = .5 hearts, 2 = 1 heart, 3 = 1.5 hearts, etc.
+  minimum_damage_value: 1
