@@ -162,6 +162,20 @@ public class MainListener implements Listener{
     			_inv.setItemInOffHand(reduced);
     		}
     	}
+    	if(requestedDeletion > 0){
+    		ItemStack[] aC = _inv.getArmorContents();
+    		for(int z=0; z<_inv.getArmorContents().length; ++z){
+    			ItemStack i = _inv.getArmorContents()[z];
+    			if(i != null && i.isSimilar(item)){
+    				int reducedNumber = i.getAmount()-requestedDeletion <= 0 ? 0 : i.getAmount()-requestedDeletion;
+    				requestedDeletion -= item.getAmount() <= 0 ? 0 : item.getAmount();
+    				i.setAmount(reducedNumber);
+    				aC[z] = i;
+    				if(requestedDeletion <= 0) break;
+    			}
+    			_inv.setArmorContents(aC);
+    		}
+    	}
     }
 	
 }
