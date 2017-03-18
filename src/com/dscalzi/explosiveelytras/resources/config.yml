@@ -11,7 +11,8 @@ general_settings:
 
   # A player must have at least one of the following
   # in their inventory at the time of crash in order
-  # to explode. Syntax is [id]:[data]|[amount]
+  # to explode. Leave this empty for no requirement.
+  # Syntax is [id]:[data]|[amount]
   # Ex. 46:0|1 = 1 tnt, 289:0|64 = 64 gunpowder
   required_items:
     - "46:0|1"

@@ -73,7 +73,7 @@ public class MainListener implements Listener{
 				if(!cm.horizontalImpactEnabled()) return;
 				if(e.getFinalDamage() < cm.getMinHorizontalDamage()) return;
 				cache.put(p.getUniqueId(), System.currentTimeMillis());
-				if(cm.consumeRequiredItems()) removeItem(match, inv);
+				if(cm.consumeRequiredItems() && match != null) removeItem(match, inv);
 				p.getWorld().createExplosion(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), 4F, true, true);
 				if(cm.fireworksHorizontalEnabled()){
 					Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
@@ -89,7 +89,7 @@ public class MainListener implements Listener{
 				if(!cm.verticalImpactEnabled()) return;
 				if(e.getFinalDamage() < cm.getMinVerticalDamage()) return;
 				cache.put(p.getUniqueId(), System.currentTimeMillis());
-				if(cm.consumeRequiredItems()) removeItem(match, inv);
+				if(cm.consumeRequiredItems() && match != null) removeItem(match, inv);
 				p.getWorld().createExplosion(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), 4F, true, true);
 				if(cm.fireworksVerticalEnabled()){
 					Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);

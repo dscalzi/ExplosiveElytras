@@ -8,7 +8,6 @@ package com.dscalzi.explosiveelytras.managers;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -77,7 +76,7 @@ public class ConfigManager {
 	@SuppressWarnings("deprecation")
 	public List<ItemStack> getRequiredItems(){
 		@SuppressWarnings("unchecked")
-		List<String> stuff = (List<String>) config.getList("general_settings.required_items", new ArrayList<String>(Arrays.asList("46:0|1")));
+		List<String> stuff = (List<String>) config.getList("general_settings.required_items", new ArrayList<String>());
 		List<ItemStack> ret = new ArrayList<ItemStack>();
 		for(String s : stuff){
 			String[] parts = s.split("\\|");
