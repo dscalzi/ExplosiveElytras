@@ -17,6 +17,10 @@ general_settings:
   required_items:
     - "46:0|1"
     
+  # The power of the explosion per required item found.
+  # This will be the total power of the explosion if
+  # the explosion multiplier is disabled.
+  # The power of a single tnt explosion is 4.
   power_per_item: 4
     
   # If enabled the power of the explosion will increase
@@ -63,4 +67,4 @@ vertical_impact_settings:
   
   # Minimum damage on the player to cause an explosion.
   # 1 = .5 hearts, 2 = 1 heart, 3 = 1.5 hearts, etc.
-  minimum_damage_value: 1
+  minimum_damage_value: 10

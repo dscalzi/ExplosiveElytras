@@ -39,7 +39,7 @@ public class MainListener implements Listener{
 		cm = ConfigManager.getInstance();
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onCollision(EntityDamageEvent e){
 		if(e.getEntity() instanceof Player){
 			Player p = (Player)e.getEntity();
@@ -65,10 +65,14 @@ public class MainListener implements Listener{
 					for(ItemStack i : inv.getArmorContents())
 						if(i != null && i.isSimilar(is) && i.getAmount() >= is.getAmount())
 							amt += i.getAmount();
-					ItemStack match = new ItemStack(is);
-					match.setAmount(amt);
-					matches.add(match);
+					if(amt > 0){
+						ItemStack match = new ItemStack(is);
+						match.setAmount(amt);
+						matches.add(match);
+					}
 				}
+				
+				if(matches.size() == 0) return;
 				
 				for(ItemStack i : matches){
 					if(i.getAmount()*powerMultiplier > maxPower){
