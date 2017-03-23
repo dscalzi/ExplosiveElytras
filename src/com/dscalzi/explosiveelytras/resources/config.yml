@@ -17,19 +17,40 @@ general_settings:
   required_items:
     - "46:0|1"
     
+  power_per_item: 4
+    
+  # If enabled the power of the explosion will increase
+  # if you have more of a required item in your inventory.
+  # The power will grow until it reaches the max power.
+  # If disabled then the power of the explosion will be equal
+  # to the power of one item (defined above).
+  explosion_multiplier:
+    enabled: true
+    max_power: 16
+
   # Should the matching required item be consumed during
   # the explosion.
   consume_on_explosion: true
-    
+  
+  # Should fireworks be launched when you explode from a crash.
+  fireworks_on_explosion: true
+  
+  # Users will only blow up in the following worlds.
+  # If left empty this plugin is essentially disabled.
+  allowed_worlds:
+    - world
+    - world_nether
+    - world_the_end
+  
+  # Choose a death message for explosive landings.
+  # Use {0} for the player's name, color codes and
+  # formatting are supported.
   death_message: "{0} had an explosive landing"
 
 #---------[Horizontal Impact Settings]----------
 # Settings for when a player crashes into something
 # horizontally, like a wall.
 horizontal_impact_settings:
-
-  enabled: true
-  fireworks_on_crash: true
   
   # Minimum damage on the player to cause an explosion.
   # 1 = .5 hearts, 2 = 1 heart, 3 = 1.5 hearts, etc.
@@ -39,9 +60,6 @@ horizontal_impact_settings:
 # Settings for when a player crashes into something
 # verically, like the ground.
 vertical_impact_settings:
-
-  enabled: true
-  fireworks_on_crash: true
   
   # Minimum damage on the player to cause an explosion.
   # 1 = .5 hearts, 2 = 1 heart, 3 = 1.5 hearts, etc.

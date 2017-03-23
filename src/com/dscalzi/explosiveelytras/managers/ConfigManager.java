@@ -73,6 +73,10 @@ public class ConfigManager {
 		return ChatColor.translateAlternateColorCodes('&', m.format(new Object[]{name}));
 	}
 	
+	public List<String> getAllowedWorlds(){
+		return this.config.getStringList("general_settings.allowed_worlds");
+	}
+	
 	@SuppressWarnings("deprecation")
 	public List<ItemStack> getRequiredItems(){
 		@SuppressWarnings("unchecked")
@@ -88,24 +92,24 @@ public class ConfigManager {
 		return ret;
 	}
 	
+	public boolean explosionMultiplier(){
+		return config.getBoolean("general_settings.explosion_multiplier.enabled", true);
+	}
+	
+	public float getPowerPerItem(){
+		return Float.parseFloat(config.getString("general_settings.power_per_item", "4.0"));
+	}
+	
+	public float getMaxPower(){
+		return Float.parseFloat(config.getString("general_settings.explosion_multiplier.max_power", "16.0"));
+	}
+	
 	public boolean consumeRequiredItems(){
 		return config.getBoolean("general_settings.consume_on_explosion", true);
 	}
 	
-	public boolean horizontalImpactEnabled(){
-		return config.getBoolean("horizontal_impact_settings.enabled", true);
-	}
-	
-	public boolean verticalImpactEnabled(){
-		return config.getBoolean("vertical_impact_settings.enabled", true);
-	}
-	
-	public boolean fireworksHorizontalEnabled(){
-		return config.getBoolean("horizontal_impact_settings.fireworks_on_crash", true);
-	}
-	
-	public boolean fireworksVerticalEnabled(){
-		return config.getBoolean("vertical_impact_settings.fireworks_on_crash", true);
+	public boolean fireworksOnExplosion(){
+		return config.getBoolean("general_settings.fireworks_on_explosion", true);
 	}
 	
 	public int getMinHorizontalDamage(){

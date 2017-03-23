@@ -5,6 +5,7 @@
  */
 package com.dscalzi.explosiveelytras;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,36 +47,51 @@ public class MainListener implements Listener{
 			if(!(e.getCause() == DamageCause.FLY_INTO_WALL || (e.getCause() == DamageCause.FALL && cache.containsKey(p.getUniqueId()) && (System.currentTimeMillis()-cache.get(p.getUniqueId())) < 200))) return;
 			PlayerInventory inv = p.getInventory();
 			List<ItemStack> requirements = cm.getRequiredItems();
-			ItemStack match = null;
+			float powerMultiplier = cm.getPowerPerItem();
+			float maxPower = cm.explosionMultiplier() ? cm.getMaxPower() : powerMultiplier;
+			List<ItemStack> matches = new ArrayList<ItemStack>();
+			List<ItemStack> consumed = new ArrayList<ItemStack>();
+			float finalPower = 0;
 			if(requirements.size() > 0){
 				for(ItemStack is : requirements){
-					//Check inventory
-					if(inv.containsAtLeast(is, is.getAmount())){
-						match = is;
-						break;
-					}
+					int amt = 0;
+					for(ItemStack i : inv.getContents())
+						if(i != null && i.isSimilar(is))
+							amt += i.getAmount();
 					//Check offhand
-					if(inv.getItemInOffHand() != null && inv.getItemInOffHand().isSimilar(is) && inv.getItemInOffHand().getAmount() >= is.getAmount()){
-						match = is;
-						break;
-					}
+					if(inv.getItemInOffHand() != null && inv.getItemInOffHand().isSimilar(is) && inv.getItemInOffHand().getAmount() >= is.getAmount())
+						amt += inv.getItemInOffHand().getAmount();
 					//Check armor
-					for(ItemStack i : inv.getArmorContents()){
-						if(i != null && i.isSimilar(is) && i.getAmount() >= is.getAmount()){
-							match = is;
-							break;
-						}
+					for(ItemStack i : inv.getArmorContents())
+						if(i != null && i.isSimilar(is) && i.getAmount() >= is.getAmount())
+							amt += i.getAmount();
+					ItemStack match = new ItemStack(is);
+					match.setAmount(amt);
+					matches.add(match);
+				}
+				
+				for(ItemStack i : matches){
+					if(i.getAmount()*powerMultiplier > maxPower){
+						int canUse = (int)((maxPower-finalPower)/powerMultiplier);
+						finalPower = maxPower;
+						ItemStack partial = new ItemStack(i);
+						partial.setAmount(canUse);
+						consumed.add(partial);
+						break;
+					} else {
+						finalPower += i.getAmount()/powerMultiplier;
+						consumed.add(i);
 					}
 				}
-				if(match == null) return;
+				
 			}
 			if(e.getCause() == DamageCause.FLY_INTO_WALL){
-				if(!cm.horizontalImpactEnabled()) return;
+				if(!shouldExplode(p)) return;
 				if(e.getFinalDamage() < cm.getMinHorizontalDamage()) return;
 				cache.put(p.getUniqueId(), System.currentTimeMillis());
-				if(cm.consumeRequiredItems() && match != null) removeItem(match, inv);
-				p.getWorld().createExplosion(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), 4F, true, true);
-				if(cm.fireworksHorizontalEnabled()){
+				if(cm.consumeRequiredItems()) consumed.forEach(i -> removeItem(i, inv));
+				p.getWorld().createExplosion(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), finalPower, true, true);
+				if(cm.fireworksOnExplosion()){
 					Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
 					FireworkMeta fm = fw.getFireworkMeta();
 					fm.addEffect(FireworkEffect.builder().flicker(false).with(Type.BALL_LARGE).withColor(Color.RED).withFade(Color.BLACK).build());
@@ -86,12 +102,12 @@ public class MainListener implements Listener{
 				e.setCancelled(true);
 			}
 			if((e.getCause() == DamageCause.FALL && cache.containsKey(p.getUniqueId()) && (System.currentTimeMillis()-cache.get(p.getUniqueId())) < 200)){
-				if(!cm.verticalImpactEnabled()) return;
+				if(!shouldExplode(p)) return;
 				if(e.getFinalDamage() < cm.getMinVerticalDamage()) return;
 				cache.put(p.getUniqueId(), System.currentTimeMillis());
-				if(cm.consumeRequiredItems() && match != null) removeItem(match, inv);
-				p.getWorld().createExplosion(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), 4F, true, true);
-				if(cm.fireworksVerticalEnabled()){
+				if(cm.consumeRequiredItems()) consumed.forEach(i -> removeItem(i, inv));
+				p.getWorld().createExplosion(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), finalPower, true, true);
+				if(cm.fireworksOnExplosion()){
 					Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
 					FireworkMeta fm = fw.getFireworkMeta();
 					fm.addEffect(FireworkEffect.builder().flicker(false).with(Type.BALL_LARGE).withColor(Color.RED).withFade(Color.BLACK).build());
@@ -128,6 +144,11 @@ public class MainListener implements Listener{
 			}
 			cache.remove(e.getEntity().getUniqueId());
 		}
+	}
+	
+	private boolean shouldExplode(Player player){
+		String world = player.getWorld().getName();
+		return cm.getAllowedWorlds().contains(world);
 	}
 	
 	private void removeItem(ItemStack item, PlayerInventory _inv) {

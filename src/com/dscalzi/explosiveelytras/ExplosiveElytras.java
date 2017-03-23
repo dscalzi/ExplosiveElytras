@@ -5,7 +5,7 @@
  */
 package com.dscalzi.explosiveelytras;
 
-import org.bstats.Metrics;
+import org.bstats.MetricsLite;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.dscalzi.explosiveelytras.managers.ConfigManager;
@@ -14,7 +14,7 @@ import com.dscalzi.explosiveelytras.managers.MessageManager;
 public class ExplosiveElytras extends JavaPlugin{
 	
 	@SuppressWarnings("unused")
-	private Metrics metrics;
+	private MetricsLite metrics;
 	
 	@Override
 	public void onEnable(){
@@ -22,7 +22,7 @@ public class ExplosiveElytras extends JavaPlugin{
 		MessageManager.initialize(this);
 		getServer().getPluginManager().registerEvents(new MainListener(), this);
 		this.getCommand("explosiveelytras").setExecutor(new MainExecutor());
-		metrics = new Metrics(this);
+		metrics = new MetricsLite(this);
 	}
 	
 	@Override
