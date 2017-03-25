@@ -1,4 +1,4 @@
-#ExplosiveElytras
+![Logo](http://i.imgur.com/PQAl7si.png)
 
 [![](http://ci.aventiumsoftworks.com/jenkins/job/ExplosiveElytras/badge/icon)](http://ci.aventiumsoftworks.com/jenkins/job/ExplosiveElytras/) [![](https://img.shields.io/badge/license-MIT-blue.svg)](https://bitbucket.org/AventiumSoftworks/explosiveelytras/src/393f97e61735ed5fe712a9232de8bd264c1f9e01/src/com/dscalzi/explosiveelytras/resources/License.txt?at=master&fileviewer=file-view-default) ![](https://img.shields.io/badge/Spigot-1.9--1.11.2-orange.svg) ![](https://img.shields.io/badge/Java-8+-ec2025.svg)
 
