@@ -30,6 +30,6 @@ You can find more extensive details on the [wiki](https://bitbucket.org/Aventium
 
 #Links
 
-* [Spigot Resource Page]()
-* [Dev Bukkit Page]()
+* [Spigot Resource Page](https://www.spigotmc.org/resources/explosiveelytras.43493/)
+* [Dev Bukkit Page](https://dev.bukkit.org/projects/explosiveelytras)
 * [Suggest Features or Report Bugs](https://bitbucket.org/AventiumSoftworks/explosiveelytras/issues)
