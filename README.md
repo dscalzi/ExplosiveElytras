@@ -21,6 +21,7 @@ These explosions can only be triggered if a player takes damage. This means that
 * Configurable values for both vertical and horizontal impacts:
     * Set a minimum damage value required to trigger explosions.
 * Enable/disable fireworks on explosion.
+* Metrics by [bStats](https://bstats.org/plugin/bukkit/ExplosiveElytras)
 * WorldGuard Integration
 
 You can find more extensive details on the [wiki](https://bitbucket.org/AventiumSoftworks/explosiveelytras/wiki/).
@@ -29,4 +30,6 @@ You can find more extensive details on the [wiki](https://bitbucket.org/Aventium
 
 #Links
 
+* [Spigot Resource Page]()
+* [Dev Bukkit Page]()
 * [Suggest Features or Report Bugs](https://bitbucket.org/AventiumSoftworks/explosiveelytras/issues)
