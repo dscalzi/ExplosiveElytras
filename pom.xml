@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.dscalzi</groupId>
   <artifactId>ExplosiveElytras</artifactId>
-  <version>0.6.0</version>
+  <version>0.7.0</version>
   <name>ExplosiveElytras</name>
   <description>High speed elytra collisions cause explosions.</description>
   
@@ -80,7 +80,7 @@
     <dependency>
         <groupId>org.spigotmc</groupId>
         <artifactId>spigot-api</artifactId>
-        <version>1.11.2-R0.1-SNAPSHOT</version>
+        <version>1.12-R0.1-SNAPSHOT</version>
         <scope>provided</scope>
      </dependency>
      <dependency>

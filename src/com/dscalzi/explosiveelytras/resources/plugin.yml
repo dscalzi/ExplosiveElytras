@@ -3,7 +3,7 @@ description: High speed elytra collisions cause explosions.
 main: com.dscalzi.explosiveelytras.ExplosiveElytras
 name: ExplosiveElytras
 softdepend: [WorldGuard]
-version: 0.6.0
+version: 0.7.0
 commands:
   explosiveelytras:
     description: Main plugin command.
@@ -11,4 +11,5 @@ permissions:
   explosiveelytras.*:
     children:
       explosiveelytras.explode: true
+      explosiveelytras.bypass.worldguard: true
       explosiveelytras.reload: true

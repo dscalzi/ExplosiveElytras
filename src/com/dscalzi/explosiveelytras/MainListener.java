@@ -56,11 +56,15 @@ public class MainListener implements Listener{
 				com.sk89q.worldguard.bukkit.WorldGuardPlugin wg = com.sk89q.worldguard.bukkit.WGBukkit.getPlugin();
 				com.sk89q.worldguard.protection.managers.RegionManager rm = wg.getRegionManager(p.getWorld());
 				if(rm != null) {
+					boolean canBuild = rm.getApplicableRegions(p.getLocation()).testState(wg.wrapPlayer(p), com.sk89q.worldguard.protection.flags.DefaultFlag.BUILD);
 					Collection<com.sk89q.worldguard.protection.flags.StateFlag.State> states = rm.getApplicableRegions(p.getLocation()).queryAllValues(null, com.sk89q.worldguard.protection.flags.DefaultFlag.TNT);
 					for(com.sk89q.worldguard.protection.flags.StateFlag.State s : states) {
 						if(s == com.sk89q.worldguard.protection.flags.StateFlag.State.DENY) {
 							stopInTheNameOfWorldGuard = true;
 						}
+					}
+					if(!canBuild && !p.hasPermission("explosiveelytras.override.worldguard")){
+						stopInTheNameOfWorldGuard = true;
 					}
 				}
 				breakBlocks = !wg.getGlobalStateManager().get(p.getWorld()).blockTNTBlockDamage;
