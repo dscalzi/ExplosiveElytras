@@ -15,12 +15,11 @@
     </developer>
   </developers>
   <build>
-    <sourceDirectory>src</sourceDirectory>
     <defaultGoal>package</defaultGoal>
     <resources>
       <resource>
-        <targetPath>.</targetPath>
-        <directory>${basedir}/src/com/dscalzi/explosiveelytras/resources/</directory>
+        <filtering>true</filtering>
+        <directory>src/main/resources/</directory>
       </resource>
     </resources>
     <finalName>ExplosiveElytras</finalName>

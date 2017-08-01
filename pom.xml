@@ -18,11 +18,10 @@
   <build>
     <defaultGoal>package</defaultGoal>
  	<finalName>ExplosiveElytras</finalName>
-    <sourceDirectory>src</sourceDirectory>
     <resources>
        <resource>
-            <targetPath>.</targetPath>
-            <directory>${basedir}/src/com/dscalzi/explosiveelytras/resources/</directory>
+            <directory>src/main/resources/</directory>
+            <filtering>true</filtering>
         </resource>
     </resources>
     <plugins>
