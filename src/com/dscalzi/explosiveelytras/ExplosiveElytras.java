@@ -15,13 +15,14 @@ public class ExplosiveElytras extends JavaPlugin {
 	
 	@SuppressWarnings("unused")
 	private MetricsLite metrics;
-	private boolean usingWorldGuard;
 	
 	@Override
 	public void onEnable(){
 		ConfigManager.initialize(this);
 		MessageManager.initialize(this);
-		setupWorldGuard();
+		if(usingWorldGuard()) {
+			this.getLogger().info("WorldGuard found, enabling support.");
+		}
 		getServer().getPluginManager().registerEvents(new MainListener(this), this);
 		this.getCommand("explosiveelytras").setExecutor(new MainExecutor());
 		metrics = new MetricsLite(this);
@@ -32,13 +33,8 @@ public class ExplosiveElytras extends JavaPlugin {
 		
 	}
 	
-	private void setupWorldGuard() {
-		usingWorldGuard = getServer().getPluginManager().getPlugin("WorldGuard") != null;
-		this.getLogger().info("WorldGuard found, enabling support.");
-	}
-	
 	public boolean usingWorldGuard() {
-		return usingWorldGuard;
+		return getServer().getPluginManager().getPlugin("WorldGuard") != null;
 	}
 	
 }

@@ -6,7 +6,6 @@
 package com.dscalzi.explosiveelytras;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +35,7 @@ public class MainListener implements Listener{
 	private final ExplosiveElytras plugin;
 	private final ConfigManager cm;
 	private Map<UUID, Long> cache = new HashMap<UUID, Long>();
+	private Map<UUID, Double> damageCache = new HashMap<UUID, Double>();
 	
 	public MainListener(ExplosiveElytras plugin){
 		cm = ConfigManager.getInstance();
@@ -46,37 +46,48 @@ public class MainListener implements Listener{
 	public void onCollision(EntityDamageEvent e){
 		if(e.getEntity() instanceof Player){
 			Player p = (Player)e.getEntity();
-			if(!p.hasPermission("explosiveelytras.explode")) return;
-			if(!(e.getCause() == DamageCause.FLY_INTO_WALL || (e.getCause() == DamageCause.FALL && cache.containsKey(p.getUniqueId()) && (System.currentTimeMillis()-cache.get(p.getUniqueId())) < 200))) return;
+			
+			if(!p.hasPermission("explosiveelytras.explode")) {
+				return;
+			}
+			
+			//Redirect damage from previous impact into explosion.
+			//Assures our custom death message is sent.
+			if(e.getCause() == DamageCause.BLOCK_EXPLOSION) {
+				if(damageCache.containsKey(p.getUniqueId())) {
+					e.setDamage(e.getDamage() + damageCache.get(p.getUniqueId()));
+					damageCache.remove(p.getUniqueId());
+				}
+				return;
+			}
+			
+			if(!(e.getCause() == DamageCause.FLY_INTO_WALL || 
+					(e.getCause() == DamageCause.FALL && cache.containsKey(p.getUniqueId()) && (System.currentTimeMillis()-cache.get(p.getUniqueId())) < 200))) {
+				return;
+			}
+			
+			String world = p.getWorld().getName();
+			boolean allowed = false;
+			for(final String s : cm.getAllowedWorlds()) {
+				if(s.equalsIgnoreCase(world)) {
+					allowed = true;
+				}
+			}
+			if(!allowed) {
+				return;
+			}
 			
 			boolean breakBlocks = true;
-			
 			if(plugin.usingWorldGuard()) {
-				boolean stopInTheNameOfWorldGuard = false;
-				com.sk89q.worldguard.bukkit.WorldGuardPlugin wg = com.sk89q.worldguard.bukkit.WGBukkit.getPlugin();
-				com.sk89q.worldguard.protection.managers.RegionManager rm = wg.getRegionManager(p.getWorld());
-				if(rm != null) {
-					boolean canBuild = rm.getApplicableRegions(p.getLocation()).testState(wg.wrapPlayer(p), com.sk89q.worldguard.protection.flags.DefaultFlag.BUILD);
-					Collection<com.sk89q.worldguard.protection.flags.StateFlag.State> states = rm.getApplicableRegions(p.getLocation()).queryAllValues(null, com.sk89q.worldguard.protection.flags.DefaultFlag.TNT);
-					for(com.sk89q.worldguard.protection.flags.StateFlag.State s : states) {
-						if(s == com.sk89q.worldguard.protection.flags.StateFlag.State.DENY) {
-							stopInTheNameOfWorldGuard = true;
-						}
-					}
-					if(!canBuild && !p.hasPermission("explosiveelytras.override.worldguard")){
-						stopInTheNameOfWorldGuard = true;
-					}
-				}
-				breakBlocks = !wg.getGlobalStateManager().get(p.getWorld()).blockTNTBlockDamage;
-				
-				if(stopInTheNameOfWorldGuard || wg.getGlobalStateManager().get(p.getWorld()).blockTNTExplosions) {
+				breakBlocks = WorldGuardWrapper.breakBlocks(plugin, p);
+				if(WorldGuardWrapper.cancelExplosion(plugin, p)) {
 					return;
 				}
 			}
 			
-			PlayerInventory inv = p.getInventory();
-			List<ItemStack> requirements = cm.getRequiredItems();
-			float powerMultiplier = cm.getPowerPerItem();
+			final PlayerInventory inv = p.getInventory();
+			final List<ItemStack> requirements = cm.getRequiredItems();
+			final float powerMultiplier = cm.getPowerPerItem();
 			float maxPower = cm.explosionMultiplier() ? cm.getMaxPower() : powerMultiplier;
 			List<ItemStack> matches = new ArrayList<ItemStack>();
 			List<ItemStack> consumed = new ArrayList<ItemStack>();
@@ -119,7 +130,6 @@ public class MainListener implements Listener{
 				
 			}
 			if(e.getCause() == DamageCause.FLY_INTO_WALL){
-				if(!shouldExplode(p)) return;
 				if(e.getFinalDamage() < cm.getMinHorizontalDamage()) return;
 				cache.put(p.getUniqueId(), System.currentTimeMillis());
 				if(cm.consumeRequiredItems()) consumed.forEach(i -> removeItem(i, inv));
@@ -132,10 +142,10 @@ public class MainListener implements Listener{
 					fw.setFireworkMeta(fm);
 					fw.detonate();
 				}
+				damageCache.put(p.getUniqueId(), e.getFinalDamage());
 				e.setCancelled(true);
 			}
 			if((e.getCause() == DamageCause.FALL && cache.containsKey(p.getUniqueId()) && (System.currentTimeMillis()-cache.get(p.getUniqueId())) < 200)){
-				if(!shouldExplode(p)) return;
 				if(e.getFinalDamage() < cm.getMinVerticalDamage()) return;
 				cache.put(p.getUniqueId(), System.currentTimeMillis());
 				if(cm.consumeRequiredItems()) consumed.forEach(i -> removeItem(i, inv));
@@ -148,6 +158,7 @@ public class MainListener implements Listener{
 					fw.setFireworkMeta(fm);
 					fw.detonate();
 				}
+				damageCache.put(p.getUniqueId(), e.getFinalDamage());
 				e.setCancelled(true);
 			}
 		}
@@ -159,7 +170,7 @@ public class MainListener implements Listener{
 			Player p = (Player)e.getEntity();
 			if(!p.hasPermission("explosiveelytras.explode")) return;
 			if(!e.isGliding())
-				cache.put((p).getUniqueId(), System.currentTimeMillis());
+				cache.put(p.getUniqueId(), System.currentTimeMillis());
 		}
 	}
 	
@@ -177,11 +188,6 @@ public class MainListener implements Listener{
 			}
 			cache.remove(e.getEntity().getUniqueId());
 		}
-	}
-	
-	private boolean shouldExplode(Player player){
-		String world = player.getWorld().getName();
-		return cm.getAllowedWorlds().contains(world);
 	}
 	
 	private void removeItem(ItemStack item, PlayerInventory _inv) {
