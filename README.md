@@ -6,6 +6,8 @@ ExplosiveElytras is a light-weight plugin built using the Spigot API. This plugi
 
 These explosions can only be triggered if a player takes damage. This means that explosions can only occur if a player is in survival mode. Vertical impacts only cause explosions if fall damage is enabled as well.
 
+A Developer API is provided and actively maintained. More details on this are provided in the wiki. If you find anything is missing or should be changed about the API, please [let us know](https://bitbucket.org/AventiumSoftworks/explosiveelytras/issues?status=new&status=open).
+
 ---
 
 #Feature List
@@ -23,10 +25,90 @@ These explosions can only be triggered if a player takes damage. This means that
 * Enable/disable fireworks on explosion.
 * Metrics by [bStats](https://bstats.org/plugin/bukkit/ExplosiveElytras)
 * WorldGuard Integration
+* Developer API
 
 You can find more extensive details on the [wiki](https://bitbucket.org/AventiumSoftworks/explosiveelytras/wiki/).
 
 ---
+
+#Building and Contributing
+
+If you would like to contribute to ExplosiveElytras, feel free to submit a pull request. The project does not use a specific code style, however please keep to the conventions used throughout the code.
+
+To build this project you will need [Maven](https://maven.apache.org/), or an IDE which supports it, and to run the following command:
+
+```shell
+mvn clean install
+```
+
+---
+
+#Developer API
+
+If you want to hook explosive elytras into your own plugin or simply want to extend functionality, you may use the provided API. The api is currently in its infancy, therefore if you feel anthing is missing or should be changed, please [let us know](https://bitbucket.org/AventiumSoftworks/explosiveelytras/issues?status=new&status=open).
+
+**Download Latest**: [![bintray](https://img.shields.io/bintray/v/dscalzi/maven/ExplosiveElytras.svg)](https://bintray.com/dscalzi/maven/ExplosiveElytras/_latestVersion)
+
+###Maven
+
+```XML
+<repository>
+    <id>jcenter</id>
+    <name>jcenter-bintray</name>
+    <url>http://jcenter.bintray.com</url>
+</repository>
+
+<dependency>
+  <groupId>com.dscalzi</groupId>
+  <artifactId>ExplosiveElytras</artifactId>
+  <version>VERSION/version>
+</dependency>
+```
+
+###Gradle
+
+```gradle
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'com.dscalzi:ExplosiveElytras:VERSION'
+}
+```
+
+###Example Usage
+
+```java
+/**
+* Example listener.
+* 
+* This listener will parse through the items consumed by the
+* explosive collision. Any items with the lore "Ancient Protection"
+* will be removed from the consumed list and will therefore be
+* preserved.
+*/
+@EventHandler
+public void onExplosiveImpact(ExplosiveImpactEvent e) {
+	List<ItemStack> consumedItems = e.getConsumedItems();
+	itemLoop:
+	for(int i=0; i<consumedItems.size(); i++) {
+		ItemStack target = consumedItems.get(i);
+		if(target.hasItemMeta()) {
+			ItemMeta targetMeta = target.getItemMeta();
+			if(targetMeta.hasLore()) {
+				for(final String s : targetMeta.getLore()) {
+					if(s.equals("Ancient Protection")) {
+						consumedItems.remove(i);
+						continue itemLoop;
+					}
+				}
+			}
+		}
+	}
+}
+```
 
 #Links
 
