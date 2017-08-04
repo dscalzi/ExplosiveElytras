@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
@@ -28,6 +29,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.FireworkMeta;
 
+import com.dscalzi.explosiveelytras.api.event.ExplosiveImpactEvent;
+import com.dscalzi.explosiveelytras.api.event.ExplosiveImpactEvent.ImpactType;
 import com.dscalzi.explosiveelytras.managers.ConfigManager;
 
 public class MainListener implements Listener{
@@ -47,12 +50,13 @@ public class MainListener implements Listener{
 		if(e.getEntity() instanceof Player){
 			Player p = (Player)e.getEntity();
 			
+			// Permission Check
 			if(!p.hasPermission("explosiveelytras.explode")) {
 				return;
 			}
 			
-			//Redirect damage from previous impact into explosion.
-			//Assures our custom death message is sent.
+			// Redirect damage from previous impact into explosion.
+			// Assures our custom death message is sent.
 			if(e.getCause() == DamageCause.BLOCK_EXPLOSION) {
 				if(damageCache.containsKey(p.getUniqueId())) {
 					e.setDamage(e.getDamage() + damageCache.get(p.getUniqueId()));
@@ -61,16 +65,30 @@ public class MainListener implements Listener{
 				return;
 			}
 			
-			if(!(e.getCause() == DamageCause.FLY_INTO_WALL || 
-					(e.getCause() == DamageCause.FALL && cache.containsKey(p.getUniqueId()) && (System.currentTimeMillis()-cache.get(p.getUniqueId())) < 200))) {
+			// Check if the impact type is valid;
+			ImpactType type = null;
+			if(e.getCause() == DamageCause.FLY_INTO_WALL) {
+				if(e.getFinalDamage() < cm.getMinHorizontalDamage()) {
+					return;
+				}
+				type = ImpactType.HORIZONTAL;
+			} else if(e.getCause() == DamageCause.FALL && cache.containsKey(p.getUniqueId()) && (System.currentTimeMillis()-cache.get(p.getUniqueId())) < 200) {
+				if(e.getFinalDamage() < cm.getMinVerticalDamage()) {
+					return;
+				}
+				type = ImpactType.VERTICAL;
+			} else {
 				return;
 			}
 			
+			// Check to see if the player's current world
+			// has elytra explosions enabled.
 			String world = p.getWorld().getName();
 			boolean allowed = false;
 			for(final String s : cm.getAllowedWorlds()) {
 				if(s.equalsIgnoreCase(world)) {
 					allowed = true;
+					break;
 				}
 			}
 			if(!allowed) {
@@ -78,6 +96,9 @@ public class MainListener implements Listener{
 			}
 			
 			boolean breakBlocks = true;
+			
+			// Check WorldGuard protections
+			// if the plugin is enabled.
 			if(plugin.usingWorldGuard()) {
 				breakBlocks = WorldGuardWrapper.breakBlocks(plugin, p);
 				if(WorldGuardWrapper.cancelExplosion(plugin, p)) {
@@ -87,33 +108,43 @@ public class MainListener implements Listener{
 			
 			final PlayerInventory inv = p.getInventory();
 			final List<ItemStack> requirements = cm.getRequiredItems();
-			final float powerMultiplier = cm.getPowerPerItem();
-			float maxPower = cm.explosionMultiplier() ? cm.getMaxPower() : powerMultiplier;
-			List<ItemStack> matches = new ArrayList<ItemStack>();
 			List<ItemStack> consumed = new ArrayList<ItemStack>();
 			float finalPower = 0;
 			if(requirements.size() > 0){
+				
+				final float powerMultiplier = cm.getPowerPerItem();
+				float maxPower = cm.explosionMultiplier() ? cm.getMaxPower() : powerMultiplier;
+				List<ItemStack> matches = new ArrayList<ItemStack>();
+				
+				// Check for matching required items
+				// in player's inventory.
 				for(ItemStack is : requirements){
 					int amt = 0;
-					for(ItemStack i : inv.getContents())
-						if(i != null && i.isSimilar(is))
+					for(ItemStack i : inv.getContents()) {
+						if(i != null && i.isSimilar(is)) {
 							amt += i.getAmount();
+						}
+					}
 					//Check offhand
-					if(inv.getItemInOffHand() != null && inv.getItemInOffHand().isSimilar(is) && inv.getItemInOffHand().getAmount() >= is.getAmount())
+					if(inv.getItemInOffHand() != null && inv.getItemInOffHand().isSimilar(is) && inv.getItemInOffHand().getAmount() >= is.getAmount()) {
 						amt += inv.getItemInOffHand().getAmount();
+					}
 					//Check armor
-					for(ItemStack i : inv.getArmorContents())
-						if(i != null && i.isSimilar(is) && i.getAmount() >= is.getAmount())
+					for(ItemStack i : inv.getArmorContents()) {
+						if(i != null && i.isSimilar(is) && i.getAmount() >= is.getAmount()) {
 							amt += i.getAmount();
+						}
+					}
 					if(amt > 0){
 						ItemStack match = new ItemStack(is);
 						match.setAmount(amt);
 						matches.add(match);
 					}
 				}
-				
 				if(matches.size() == 0) return;
 				
+				// Calculate the explosion power
+				// based on the found required items.
 				for(ItemStack i : matches){
 					if(i.getAmount()*powerMultiplier > maxPower){
 						int canUse = (int)((maxPower-finalPower)/powerMultiplier);
@@ -129,38 +160,33 @@ public class MainListener implements Listener{
 				}
 				
 			}
-			if(e.getCause() == DamageCause.FLY_INTO_WALL){
-				if(e.getFinalDamage() < cm.getMinHorizontalDamage()) return;
-				cache.put(p.getUniqueId(), System.currentTimeMillis());
-				if(cm.consumeRequiredItems()) consumed.forEach(i -> removeItem(i, inv));
-				p.getWorld().createExplosion(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), finalPower, true, breakBlocks);
-				if(cm.fireworksOnExplosion()){
-					Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
-					FireworkMeta fm = fw.getFireworkMeta();
-					fm.addEffect(FireworkEffect.builder().flicker(false).with(Type.BALL_LARGE).withColor(Color.RED).withFade(Color.BLACK).build());
-					fm.setPower(0);
-					fw.setFireworkMeta(fm);
-					fw.detonate();
-				}
-				damageCache.put(p.getUniqueId(), e.getFinalDamage());
-				e.setCancelled(true);
+			
+			// Create default firework.
+			Firework fw = null;
+			if(cm.fireworksOnExplosion()){
+				fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
+				FireworkMeta fm = fw.getFireworkMeta();
+				fm.addEffect(FireworkEffect.builder().flicker(false).with(Type.BALL_LARGE).withColor(Color.RED).withFade(Color.BLACK).build());
+				fm.setPower(0);
+				fw.setFireworkMeta(fm);
 			}
-			if((e.getCause() == DamageCause.FALL && cache.containsKey(p.getUniqueId()) && (System.currentTimeMillis()-cache.get(p.getUniqueId())) < 200)){
-				if(e.getFinalDamage() < cm.getMinVerticalDamage()) return;
-				cache.put(p.getUniqueId(), System.currentTimeMillis());
-				if(cm.consumeRequiredItems()) consumed.forEach(i -> removeItem(i, inv));
-				p.getWorld().createExplosion(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), finalPower, true, breakBlocks);
-				if(cm.fireworksOnExplosion()){
-					Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
-					FireworkMeta fm = fw.getFireworkMeta();
-					fm.addEffect(FireworkEffect.builder().flicker(false).with(Type.BALL_LARGE).withColor(Color.RED).withFade(Color.BLACK).build());
-					fm.setPower(0);
-					fw.setFireworkMeta(fm);
-					fw.detonate();
-				}
-				damageCache.put(p.getUniqueId(), e.getFinalDamage());
-				e.setCancelled(true);
+			
+			ExplosiveImpactEvent event = new ExplosiveImpactEvent(p, type, breakBlocks, consumed, fw, e.getFinalDamage(), finalPower);
+			
+			// Dispatch the event.
+			Bukkit.getServer().getPluginManager().callEvent(event);
+			if(event.isCancelled()) {
+				return;
 			}
+			cache.put(p.getUniqueId(), System.currentTimeMillis());
+			consumed = event.getConsumedItems();
+			if(cm.consumeRequiredItems()) consumed.forEach(i -> removeItem(i, inv));
+			p.getWorld().createExplosion(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), finalPower, true, event.getBreakBlocks());
+			if(cm.fireworksOnExplosion() && event.hasFirework()) {
+				event.getFirework().detonate();
+			}
+			damageCache.put(p.getUniqueId(), event.getFinalDamage());
+			e.setCancelled(true);
 		}
 	}
 	
@@ -168,15 +194,20 @@ public class MainListener implements Listener{
 	public void onGlide(EntityToggleGlideEvent e){
 		if(e.getEntity() instanceof Player){
 			Player p = (Player)e.getEntity();
-			if(!p.hasPermission("explosiveelytras.explode")) return;
-			if(!e.isGliding())
+			if(!p.hasPermission("explosiveelytras.explode")) {
+				return;
+			}
+			if(!e.isGliding()) {
 				cache.put(p.getUniqueId(), System.currentTimeMillis());
+			}
 		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onDeath(PlayerDeathEvent e){
-		if(!e.getEntity().hasPermission("explosiveelytras.explode")) return;
+		if(!e.getEntity().hasPermission("explosiveelytras.explode")) {
+			return;
+		}
 		if(cache.containsKey(e.getEntity().getUniqueId())){
 			if((System.currentTimeMillis()-cache.get(e.getEntity().getUniqueId())) > 200){
 				cache.remove(e.getEntity().getUniqueId());

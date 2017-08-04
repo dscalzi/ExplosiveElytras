@@ -4,7 +4,7 @@
   <groupId>com.dscalzi</groupId>
   <artifactId>ExplosiveElytras</artifactId>
   <name>ExplosiveElytras</name>
-  <version>0.7.1</version>
+  <version>0.8.0</version>
   <description>High speed elytra collisions cause explosions.</description>
   <developers>
     <developer>
@@ -19,7 +19,7 @@
     <resources>
       <resource>
         <filtering>true</filtering>
-        <directory>src/main/resources/</directory>
+        <directory>src/main/resources</directory>
       </resource>
     </resources>
     <finalName>ExplosiveElytras</finalName>
@@ -31,6 +31,28 @@
           <source>1.8</source>
           <target>1.8</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
@@ -132,5 +154,15 @@
       </exclusions>
     </dependency>
   </dependencies>
+  <distributionManagement>
+    <repository>
+      <id>bintray-dscalzi-maven</id>
+      <name>dscalzi-maven</name>
+      <url>https://api.bintray.com/maven/dscalzi/maven/ExplosiveElytras/;publish=1</url>
+    </repository>
+  </distributionManagement>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 </project>
 
