@@ -25,7 +25,7 @@ A Developer API is provided and actively maintained. More details on this are pr
 * Enable/disable fireworks on explosion.
 * Metrics by [bStats](https://bstats.org/plugin/bukkit/ExplosiveElytras)
 * WorldGuard Integration
-* Developer API
+* Developer API with Maven and Gradle support.
 
 You can find more extensive details on the [wiki](https://bitbucket.org/AventiumSoftworks/explosiveelytras/wiki/).
 
@@ -63,7 +63,7 @@ If you want to hook explosive elytras into your own plugin or simply want to ext
 <dependency>
   <groupId>com.dscalzi</groupId>
   <artifactId>ExplosiveElytras</artifactId>
-  <version>VERSION/version>
+  <version>VERSION</version>
 </dependency>
 ```
 
