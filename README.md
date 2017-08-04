@@ -6,7 +6,7 @@ ExplosiveElytras is a light-weight plugin built using the Spigot API. This plugi
 
 These explosions can only be triggered if a player takes damage. This means that explosions can only occur if a player is in survival mode. Vertical impacts only cause explosions if fall damage is enabled as well.
 
-A Developer API is provided and actively maintained. More details on this are provided in the wiki. If you find anything is missing or should be changed about the API, please [let us know](https://bitbucket.org/AventiumSoftworks/explosiveelytras/issues?status=new&status=open).
+A Developer API is provided and actively maintained. More details on this are provided below.
 
 ---
 
@@ -48,6 +48,8 @@ mvn clean install
 If you want to hook explosive elytras into your own plugin or simply want to extend functionality, you may use the provided API. The api is currently in its infancy, therefore if you feel anthing is missing or should be changed, please [let us know](https://bitbucket.org/AventiumSoftworks/explosiveelytras/issues?status=new&status=open).
 
 **Download Latest**: [![bintray](https://img.shields.io/bintray/v/dscalzi/maven/ExplosiveElytras.svg)](https://bintray.com/dscalzi/maven/ExplosiveElytras/_latestVersion)
+
+*Javadocs are not hosted, however they are provided on the maven repository.*
 
 ###Maven
 
@@ -109,6 +111,8 @@ public void onExplosiveImpact(ExplosiveImpactEvent e) {
 	}
 }
 ```
+
+---
 
 #Links
 

@@ -45,7 +45,7 @@ public class MainListener implements Listener{
 		this.plugin = plugin;
 	}
 	
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onCollision(EntityDamageEvent e){
 		if(e.getEntity() instanceof Player){
 			Player p = (Player)e.getEntity();
@@ -59,7 +59,7 @@ public class MainListener implements Listener{
 			// Assures our custom death message is sent.
 			if(e.getCause() == DamageCause.BLOCK_EXPLOSION) {
 				if(damageCache.containsKey(p.getUniqueId())) {
-					e.setDamage(e.getDamage() + damageCache.get(p.getUniqueId()));
+					e.setDamage(e.getFinalDamage() + damageCache.get(p.getUniqueId()));
 					damageCache.remove(p.getUniqueId());
 				}
 				return;
@@ -154,7 +154,7 @@ public class MainListener implements Listener{
 						consumed.add(partial);
 						break;
 					} else {
-						finalPower += i.getAmount()/powerMultiplier;
+						finalPower += (i.getAmount()*powerMultiplier);
 						consumed.add(i);
 					}
 				}
@@ -170,7 +170,6 @@ public class MainListener implements Listener{
 				fm.setPower(0);
 				fw.setFireworkMeta(fm);
 			}
-			
 			ExplosiveImpactEvent event = new ExplosiveImpactEvent(p, type, breakBlocks, consumed, fw, e.getFinalDamage(), finalPower);
 			
 			// Dispatch the event.
@@ -178,14 +177,14 @@ public class MainListener implements Listener{
 			if(event.isCancelled()) {
 				return;
 			}
-			cache.put(p.getUniqueId(), System.currentTimeMillis());
 			consumed = event.getConsumedItems();
 			if(cm.consumeRequiredItems()) consumed.forEach(i -> removeItem(i, inv));
-			p.getWorld().createExplosion(p.getLocation().getX(), p.getLocation().getY(), p.getLocation().getZ(), finalPower, true, event.getBreakBlocks());
+			cache.put(p.getUniqueId(), System.currentTimeMillis());
+			damageCache.put(p.getUniqueId(), event.getFinalDamage());
+			p.getWorld().createExplosion(event.getLocation().getX(), event.getLocation().getY(), event.getLocation().getZ(), finalPower, true, event.getBreakBlocks());
 			if(cm.fireworksOnExplosion() && event.hasFirework()) {
 				event.getFirework().detonate();
 			}
-			damageCache.put(p.getUniqueId(), event.getFinalDamage());
 			e.setCancelled(true);
 		}
 	}
