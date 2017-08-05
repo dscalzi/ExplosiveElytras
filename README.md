@@ -47,7 +47,7 @@ mvn clean install
 
 If you want to hook explosive elytras into your own plugin or simply want to extend functionality, you may use the provided API. The api is currently in its infancy, therefore if you feel anthing is missing or should be changed, please [let us know](https://bitbucket.org/AventiumSoftworks/explosiveelytras/issues?status=new&status=open).
 
-**Download Latest**: [![bintray](https://img.shields.io/bintray/v/dscalzi/maven/ExplosiveElytras.svg)](https://bintray.com/dscalzi/maven/ExplosiveElytras/_latestVersion)
+**Download Latest**: [![bintray](https://api.bintray.com/packages/dscalzi/maven/ExplosiveElytras/images/download.svg)](https://bintray.com/dscalzi/maven/ExplosiveElytras/_latestVersion)
 
 *Javadocs are not hosted, however they are provided on the maven repository.*
 
