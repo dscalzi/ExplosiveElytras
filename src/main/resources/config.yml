@@ -36,6 +36,13 @@ general_settings:
   # the explosion.
   consume_on_explosion: true
   
+  # Should the elytra the player is wearing be consumed
+  # during the explosion. This method is preferable to
+  # simply adding the elytra to the required items list,
+  # as only the chest plate slot is checked (ie only the
+  # elytra currently worn will be consumed).
+  consume_elytra_on_explosion: false
+  
   # Should fireworks be launched when you explode from a crash.
   fireworks_on_explosion: true
   

@@ -108,6 +108,10 @@ public class ConfigManager {
 		return config.getBoolean("general_settings.consume_on_explosion", true);
 	}
 	
+	public boolean consumeElytra() {
+		return config.getBoolean("general_settings.consume_elytra_on_explosion", false);
+	}
+	
 	public boolean fireworksOnExplosion(){
 		return config.getBoolean("general_settings.fireworks_on_explosion", true);
 	}
