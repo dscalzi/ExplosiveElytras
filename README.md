@@ -19,6 +19,9 @@ A Developer API is provided and actively maintained. More details on this are pr
 * Configure the explosion power per required item.
 * Enable/disable an explosion multiplier. If more required items are found in a player's inventory the explosion will be larger.
     * Configurable limit for the maximum explosion power.
+* Configure details about the explosion itself.
+    * If blocks should be destroyed.
+    * If fire should be spread.
 * Configurable death message when a player dies in an explosive collision.
 * Configurable values for both vertical and horizontal impacts:
     * Set a minimum damage value required to trigger explosions.
