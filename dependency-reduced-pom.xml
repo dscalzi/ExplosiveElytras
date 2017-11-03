@@ -4,16 +4,30 @@
   <groupId>com.dscalzi</groupId>
   <artifactId>ExplosiveElytras</artifactId>
   <name>ExplosiveElytras</name>
-  <version>0.8.0</version>
+  <version>0.9.0</version>
   <description>High speed elytra collisions cause explosions.</description>
+  <url>https://bitbucket.org/AventiumSoftworks/explosiveelytras</url>
   <developers>
     <developer>
       <name>Daniel Scalzi (TheKraken7)</name>
+      <organization>AventiumSoftworks</organization>
+      <organizationUrl>http://aventiumsoftworks.com/</organizationUrl>
       <roles>
         <role>Project Lead</role>
       </roles>
     </developer>
   </developers>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:git://bitbucket.org/AventiumSoftworks/explosiveelytras.git</connection>
+    <developerConnection>scm:git:ssh://bitbucket.org:AventiumSoftworks/explosiveelytras.git</developerConnection>
+    <url>https://bitbucket.org/AventiumSoftworks/explosiveelytras/src</url>
+  </scm>
   <build>
     <defaultGoal>package</defaultGoal>
     <resources>
@@ -96,7 +110,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.12-R0.1-SNAPSHOT</version>
+      <version>1.12.2-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>

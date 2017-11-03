@@ -36,16 +36,6 @@ general_settings:
   # the explosion.
   consume_on_explosion: true
   
-  # Should the elytra the player is wearing be consumed
-  # during the explosion. This method is preferable to
-  # simply adding the elytra to the required items list,
-  # as only the chest plate slot is checked (ie only the
-  # elytra currently worn will be consumed).
-  consume_elytra_on_explosion: false
-  
-  # Should fireworks be launched when you explode from a crash.
-  fireworks_on_explosion: true
-  
   # Users will only blow up in the following worlds.
   # If left empty this plugin is essentially disabled.
   allowed_worlds:
@@ -57,6 +47,28 @@ general_settings:
   # Use {0} for the player's name, color codes and
   # formatting are supported.
   death_message: "{0} had an explosive landing"
+
+#-------------[Explosion Settings]--------------
+# Settings explosion creation and handling. Note
+# that some of these settings may be overriden by
+# your server's protection plugin.
+explosion_settings:
+
+  # Should blocks be damaged by the explosion.
+  break_blocks: true
+  
+  # Should fire be created by the explosion.
+  set_fire: true
+  
+  # Should fireworks be launched when you explode from a crash.
+  fireworks: true
+  
+  # Should the elytra the player is wearing be consumed
+  # during the explosion. This method is preferable to
+  # simply adding the elytra to the required items list,
+  # as only the chestplate slot is checked (ie only the
+  # elytra currently worn will be consumed).
+  consume_elytra: false
 
 #---------[Horizontal Impact Settings]----------
 # Settings for when a player crashes into something

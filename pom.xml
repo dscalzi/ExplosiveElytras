@@ -5,6 +5,7 @@
   <version>0.9.0</version>
   <name>ExplosiveElytras</name>
   <description>High speed elytra collisions cause explosions.</description>
+  <url>https://bitbucket.org/AventiumSoftworks/explosiveelytras</url>
   
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -16,8 +17,17 @@
          <roles>
            <role>Project Lead</role>
          </roles>
+         <organization>AventiumSoftworks</organization>
+      	 <organizationUrl>http://aventiumsoftworks.com/</organizationUrl>
       </developer>
   </developers>
+  
+  <licenses>
+    <license>
+	    <name>MIT License</name>
+	    <url>http://www.opensource.org/licenses/mit-license.php</url>
+    </license>
+  </licenses>
   
   <build>
     <defaultGoal>package</defaultGoal>
@@ -117,13 +127,13 @@
     <dependency>
         <groupId>org.spigotmc</groupId>
         <artifactId>spigot-api</artifactId>
-        <version>1.12-R0.1-SNAPSHOT</version>
+        <version>1.12.2-R0.1-SNAPSHOT</version>
         <scope>provided</scope>
      </dependency>
      <dependency>
   		<groupId>org.bstats</groupId>
  		<artifactId>bstats-bukkit-lite</artifactId>
-  		<version>1.1</version>
+  		<version>1.2</version>
 	</dependency>
 	<dependency>
         <groupId>com.sk89q</groupId>
@@ -132,4 +142,10 @@
         <scope>provided</scope>
     </dependency>
   </dependencies>
+  
+  <scm>
+    <connection>scm:git:git://bitbucket.org/AventiumSoftworks/explosiveelytras.git</connection>
+    <developerConnection>scm:git:ssh://bitbucket.org:AventiumSoftworks/explosiveelytras.git</developerConnection>
+    <url>https://bitbucket.org/AventiumSoftworks/explosiveelytras/src</url>
+  </scm>
 </project>

@@ -96,12 +96,17 @@ public class MainListener implements Listener{
 				return;
 			}
 			
-			boolean breakBlocks = true;
+			boolean breakBlocks = cm.breakBlocks();
+			boolean setFire = cm.setFire();
 			
 			// Check WorldGuard protections
 			// if the plugin is enabled.
 			if(plugin.usingWorldGuard()) {
-				breakBlocks = WorldGuardWrapper.breakBlocks(plugin, p);
+				// Worldguard only overrides the native value if breakBlocks
+				// is enabled on our end.
+				if(breakBlocks) {
+					breakBlocks = WorldGuardWrapper.breakBlocks(plugin, p);
+				}
 				if(WorldGuardWrapper.cancelExplosion(plugin, p)) {
 					return;
 				}
@@ -162,6 +167,7 @@ public class MainListener implements Listener{
 				
 			}
 			
+			// Check if the elytra should be consumed.
 			if(cm.consumeElytra()) {
 				if(inv.getChestplate() != null && inv.getChestplate().getType() == Material.ELYTRA) {
 					consumed.add(inv.getChestplate());
@@ -177,7 +183,7 @@ public class MainListener implements Listener{
 				fm.setPower(0);
 				fw.setFireworkMeta(fm);
 			}
-			ExplosiveImpactEvent event = new ExplosiveImpactEvent(p, type, breakBlocks, consumed, fw, e.getFinalDamage(), finalPower);
+			ExplosiveImpactEvent event = new ExplosiveImpactEvent(p, type, setFire, breakBlocks, consumed, fw, e.getFinalDamage(), finalPower);
 			
 			// Dispatch the event.
 			Bukkit.getServer().getPluginManager().callEvent(event);
@@ -188,7 +194,7 @@ public class MainListener implements Listener{
 			if(cm.consumeRequiredItems()) consumed.forEach(i -> removeItem(i, inv));
 			cache.put(p.getUniqueId(), System.currentTimeMillis());
 			damageCache.put(p.getUniqueId(), event.getFinalDamage());
-			p.getWorld().createExplosion(event.getLocation().getX(), event.getLocation().getY(), event.getLocation().getZ(), finalPower, true, event.getBreakBlocks());
+			p.getWorld().createExplosion(event.getLocation().getX(), event.getLocation().getY(), event.getLocation().getZ(), finalPower, setFire, event.getBreakBlocks());
 			if(cm.fireworksOnExplosion() && event.hasFirework()) {
 				event.getFirework().detonate();
 			}

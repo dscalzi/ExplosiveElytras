@@ -109,11 +109,19 @@ public class ConfigManager {
 	}
 	
 	public boolean consumeElytra() {
-		return config.getBoolean("general_settings.consume_elytra_on_explosion", false);
+		return config.getBoolean("explosion_settings.consume_elytra", false);
+	}
+	
+	public boolean breakBlocks() {
+		return config.getBoolean("explosion_settings.break_blocks", true);
+	}
+	
+	public boolean setFire() {
+		return config.getBoolean("explosion_settings.set_fire", true);
 	}
 	
 	public boolean fireworksOnExplosion(){
-		return config.getBoolean("general_settings.fireworks_on_explosion", true);
+		return config.getBoolean("explosion_settings.fireworks", true);
 	}
 	
 	public int getMinHorizontalDamage(){

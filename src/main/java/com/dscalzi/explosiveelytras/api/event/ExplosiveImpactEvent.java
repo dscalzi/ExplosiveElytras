@@ -29,6 +29,7 @@ public class ExplosiveImpactEvent extends Event implements Cancellable {
 	private final ImpactType impactType;
 	
 	private boolean cancelled = false;
+	private boolean setFire;
 	private boolean breakBlocks;
 	private List<ItemStack> consumedItems;
 	private Firework firework;
@@ -42,6 +43,7 @@ public class ExplosiveImpactEvent extends Event implements Cancellable {
 	 * 
 	 * @param player The player involved in the collision.
 	 * @param impactType The impact type.
+	 * @param setFire If the explosion will set fire.
 	 * @param breakBlocks If the explosion will break blocks.
 	 * @param consumedItems The items which will be consumed by the explosion.
 	 * @param firework The firework which will be detonated by this event.
@@ -50,11 +52,12 @@ public class ExplosiveImpactEvent extends Event implements Cancellable {
 	 * 
 	 * @since 0.8.0
 	 */
-	public ExplosiveImpactEvent(Player player, ImpactType impactType, boolean breakBlocks, List<ItemStack> consumedItems, Firework firework, double impactDamage, float explosionPower) {
+	public ExplosiveImpactEvent(Player player, ImpactType impactType, boolean setFire, boolean breakBlocks, List<ItemStack> consumedItems, Firework firework, double impactDamage, float explosionPower) {
 		super();
 		this.player = player;
 		this.impactType = impactType;
 		this.location = player.getLocation();
+		this.setFire = setFire;
 		this.breakBlocks = breakBlocks;
 		this.consumedItems = consumedItems;
 		this.firework = firework;
@@ -176,7 +179,29 @@ public class ExplosiveImpactEvent extends Event implements Cancellable {
 	public void setFinalDamage(double damage) {
 		this.finalDamage = damage;
 	}
+	
+	/**
+	 * Gets if the resulting explosion will set fire.
+	 * 
+	 * @return True if the explosion will set fire, otherwise false.
+	 * 
+	 * @since 0.9.0
+	 */
+	public boolean getSetFire() {
+		return setFire;
+	}
 
+	/**
+	 * Set if the resulting explosion should set fire.
+	 * 
+	 * @param setFire If true, the explosion will set fire.
+	 * 
+	 * @since 0.9.0
+	 */
+	public void setSetFire(boolean setFire) {
+		this.setFire = setFire;
+	}
+	
 	/**
 	 * Gets if the resulting explosion will damage blocks.
 	 * 

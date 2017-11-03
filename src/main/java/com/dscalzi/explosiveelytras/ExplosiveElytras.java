@@ -5,7 +5,7 @@
  */
 package com.dscalzi.explosiveelytras;
 
-import org.bstats.MetricsLite;
+import org.bstats.bukkit.MetricsLite;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.dscalzi.explosiveelytras.managers.ConfigManager;
@@ -26,11 +26,6 @@ public class ExplosiveElytras extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new MainListener(this), this);
 		this.getCommand("explosiveelytras").setExecutor(new MainExecutor());
 		metrics = new MetricsLite(this);
-	}
-	
-	@Override
-	public void onDisable(){
-		
 	}
 	
 	public boolean usingWorldGuard() {

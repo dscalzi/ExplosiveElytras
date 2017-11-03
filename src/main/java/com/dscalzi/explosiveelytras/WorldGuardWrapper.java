@@ -29,7 +29,7 @@ public class WorldGuardWrapper {
 					stopInTheNameOfWorldGuard = true;
 				}
 			}
-			if(!canBuild && !p.hasPermission("explosiveelytras.override.worldguard")){
+			if(!canBuild && !p.hasPermission("explosiveelytras.bypass.worldguard")){
 				stopInTheNameOfWorldGuard = true;
 			}
 		}
