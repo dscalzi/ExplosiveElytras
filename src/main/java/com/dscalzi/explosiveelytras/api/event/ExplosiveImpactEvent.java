@@ -13,7 +13,10 @@ import org.bukkit.inventory.ItemStack;
 /**
  * Event thrown when a player explosively collides with an object.
  * This event can be used to modify properties of the collision or
- * cancel it all together.
+ * cancel it all together. This event is called before the explosion
+ * is created, allowing you to also modify the properties of the
+ * explosion. The damage done by this event does not include damage caused
+ * by the explosion. An event for this will be added in future versions.
  * 
  * @author Daniel D. Scalzi
  * 
@@ -33,6 +36,7 @@ public class ExplosiveImpactEvent extends Event implements Cancellable {
 	private boolean breakBlocks;
 	private List<ItemStack> consumedItems;
 	private Firework firework;
+	@Deprecated
 	private double impactDamage;
 	private float explosionPower;
 	
@@ -133,22 +137,33 @@ public class ExplosiveImpactEvent extends Event implements Cancellable {
 	}
 	
 	/**
-	 * This method will return the final damage done to the player as a result of the collision.
+	 * This method will return the final damage done to the player as a result of <strong>ONLY</strong>
+	 * the collision (impact).
 	 * 
 	 * @return The final damage done to the player as a result of the collision.
 	 * 
 	 * @since 0.8.0
+	 * 
+	 * @deprecated Use {@link #getFinalDamage() getFinalDamage()}.
+	 * Sub-damage types will be removed from this event as the only damage accounted for will be that
+	 * caused by the impact itself. A separate event will be triggered when the explosion occurs.<br>
+	 * <strong>Will be removed in the next SEMVER MAJOR</strong>
 	 */
 	public double getImpactDamage() {
 		return impactDamage;
 	}
 
 	/**
-	 * Sets the impact damage.
+	 * Sets the impact damage. This will also change the final damage value.
 	 * 
 	 * @param impactDamage The new impact damage value.
 	 * 
 	 * @since 0.8.0
+	 * 
+	 * @deprecated Use {@link #setFinalDamage(double) setFinalDamage(double)}
+	 * Sub-damage types will be removed from this event as the only damage accounted for will be that
+	 * caused by the impact itself. A separate event will be triggered when the explosion occurs.<br>
+	 * <strong>Will be removed in the next SEMVER MAJOR</strong>
 	 */
 	public void setImpactDamage(double impactDamage) {
 		this.finalDamage -= this.impactDamage;
@@ -157,11 +172,10 @@ public class ExplosiveImpactEvent extends Event implements Cancellable {
 	}
 	
 	/**
-	 * Gets the final damage dealt by this event. This includes all of the damage subtypes.
-	 * Currently the only damage contributing to the final damage is the impact damage.
-	 * This value DOES NOT include the damage dealt by resulting explosion.
+	 * Get the final damage caused by the explosive impact. This damage originates from the
+	 * impact <strong>ONLY</strong>.
 	 * 
-	 * @return The final damage done to the player.
+	 * @return The final damage done to the player due to the explosive impact.
 	 * 
 	 * @since 0.8.0
 	 */
@@ -170,9 +184,10 @@ public class ExplosiveImpactEvent extends Event implements Cancellable {
 	}
 	
 	/**
-	 * Set the final damage which will be done to the player.
+	 * Set the final damage which is caused by the explosive impact. This value originates
+	 * from the impact <strong>ONLY</strong>.
 	 * 
-	 * @param damage The new damage value.
+	 * @param damage The new final damage value.
 	 * 
 	 * @since 0.8.0
 	 */
