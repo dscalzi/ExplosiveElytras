@@ -10,7 +10,7 @@ A Developer API is provided and actively maintained. More details on this are pr
 
 ---
 
-#Feature List
+# Feature List
 
 * Allow high speed elytra collisions to cause explosions.
 * Configure which items a player must have in order to explode on impact.
@@ -34,7 +34,7 @@ You can find more extensive details on the [wiki](https://bitbucket.org/Aventium
 
 ---
 
-#Building and Contributing
+# Building and Contributing
 
 If you would like to contribute to ExplosiveElytras, feel free to submit a pull request. The project does not use a specific code style, however please keep to the conventions used throughout the code.
 
@@ -46,7 +46,7 @@ mvn clean install
 
 ---
 
-#Developer API
+# Developer API
 
 If you want to hook explosive elytras into your own plugin or simply want to extend functionality, you may use the provided API. The api is currently in its infancy, therefore if you feel anthing is missing or should be changed, please [let us know](https://bitbucket.org/AventiumSoftworks/explosiveelytras/issues?status=new&status=open).
 
@@ -54,7 +54,7 @@ If you want to hook explosive elytras into your own plugin or simply want to ext
 
 *Javadocs are not hosted, however they are provided on the maven repository.*
 
-###Maven
+### Maven
 
 ```XML
 <repository>
@@ -70,7 +70,7 @@ If you want to hook explosive elytras into your own plugin or simply want to ext
 </dependency>
 ```
 
-###Gradle
+### Gradle
 
 ```gradle
 
@@ -83,7 +83,7 @@ dependencies {
 }
 ```
 
-###Example Usage
+### Example Usage
 
 ```java
 /**
@@ -117,7 +117,7 @@ public void onExplosiveImpact(ExplosiveImpactEvent e) {
 
 ---
 
-#Links
+# Links
 
 * [Spigot Resource Page](https://www.spigotmc.org/resources/explosiveelytras.43493/)
 * [Dev Bukkit Page](https://dev.bukkit.org/projects/explosiveelytras)
