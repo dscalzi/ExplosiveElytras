@@ -104,7 +104,7 @@ public class MessageManager {
 	public void versionMessage(CommandSender sender){
 		sendMessage(sender, "ExplosiveElytras Version " + plugin.getDescription().getVersion() + 
 				"\n" + cPrimary + "| " + cMessage + "Metrics" + cPrimary + " | " + cMessage + "https://bstats.org/plugin/bukkit/ExplosiveElytras" + 
-				"\n" + cPrimary + "| " + cMessage + "Source" + cPrimary + " | " + cMessage + "https://bitbucket.org/AventiumSoftworks/explosiveelytras");
+				"\n" + cPrimary + "| " + cMessage + "Source" + cPrimary + " | " + cMessage + "https://github.com/dscalzi/ExplosiveElytras");
 	}
 	
 }
