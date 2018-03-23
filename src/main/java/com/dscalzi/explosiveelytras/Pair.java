@@ -1,6 +1,6 @@
 /*
- * VirtualShopX
- * Copyright (C) 2015-2018 Daniel D. Scalzi
+ * ExplosiveElytras
+ * Copyright (C) 2017-2018 Daniel D. Scalzi
  * See LICENSE for license information.
  */
 package com.dscalzi.explosiveelytras;

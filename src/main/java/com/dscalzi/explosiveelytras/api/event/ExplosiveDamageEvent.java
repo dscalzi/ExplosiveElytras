@@ -1,3 +1,8 @@
+/*
+ * ExplosiveElytras
+ * Copyright (C) 2017-2018 Daniel D. Scalzi
+ * See LICENSE for license information.
+ */
 package com.dscalzi.explosiveelytras.api.event;
 
 import org.bukkit.entity.Player;
