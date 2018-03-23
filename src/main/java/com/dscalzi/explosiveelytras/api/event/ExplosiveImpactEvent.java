@@ -20,8 +20,9 @@ import org.bukkit.inventory.ItemStack;
  * This event can be used to modify properties of the collision or
  * cancel it all together. This event is called before the explosion
  * is created, allowing you to also modify the properties of the
- * explosion. The damage done by this event does not include damage caused
- * by the explosion. An event for this will be added in future versions.
+ * explosion. Following the explosion, an {@link ExplosiveDamageEvent}
+ * is dispatched. That event deals with applying damage to the player
+ * immediately after the explosive impact.
  * 
  * @author Daniel D. Scalzi
  * 
@@ -41,11 +42,8 @@ public class ExplosiveImpactEvent extends Event implements Cancellable {
 	private boolean breakBlocks;
 	private List<ItemStack> consumedItems;
 	private Firework firework;
-	@Deprecated
-	private double impactDamage;
 	private float explosionPower;
-	
-	private double finalDamage;
+	private double impactDamage;
 
 	/**
 	 * Create an ExplosiveImpactEvent
@@ -56,7 +54,7 @@ public class ExplosiveImpactEvent extends Event implements Cancellable {
 	 * @param breakBlocks If the explosion will break blocks.
 	 * @param consumedItems The items which will be consumed by the explosion.
 	 * @param firework The firework which will be detonated by this event.
-	 * @param impactDamage The final damage done to the player by the impact.
+	 * @param impactDamage The damage value caused by the impact.
 	 * @param explosionPower The power of the resulting explosion.
 	 * 
 	 * @since 0.8.0
@@ -70,11 +68,8 @@ public class ExplosiveImpactEvent extends Event implements Cancellable {
 		this.breakBlocks = breakBlocks;
 		this.consumedItems = consumedItems;
 		this.firework = firework;
-		this.impactDamage = impactDamage;
 		this.explosionPower = explosionPower;
-		
-		//Calculate Effective Damage
-		this.finalDamage = impactDamage;
+		this.impactDamage = impactDamage;
 	}
 	
 	/**
@@ -142,62 +137,29 @@ public class ExplosiveImpactEvent extends Event implements Cancellable {
 	}
 	
 	/**
-	 * This method will return the final damage done to the player as a result of <strong>ONLY</strong>
-	 * the collision (impact).
+	 * Get a preview of the impact's damage value. This is the damage value caused <strong>ONLY</strong>
+	 * by the impact. Its value will be propagated to an {@link ExplosiveDamageEvent} where it will be
+	 * combined with the explosion damage value and applied to the player.
 	 * 
-	 * @return The final damage done to the player as a result of the collision.
+	 * @return The damage value caused by the impact.
 	 * 
 	 * @since 0.8.0
-	 * 
-	 * @deprecated Use {@link #getFinalDamage() getFinalDamage()}.
-	 * Sub-damage types will be removed from this event as the only damage accounted for will be that
-	 * caused by the impact itself. A separate event will be triggered when the explosion occurs.<br>
-	 * <strong>Will be removed in the next SEMVER MAJOR</strong>
 	 */
 	public double getImpactDamage() {
-		return impactDamage;
-	}
-
-	/**
-	 * Sets the impact damage. This will also change the final damage value.
-	 * 
-	 * @param impactDamage The new impact damage value.
-	 * 
-	 * @since 0.8.0
-	 * 
-	 * @deprecated Use {@link #setFinalDamage(double) setFinalDamage(double)}
-	 * Sub-damage types will be removed from this event as the only damage accounted for will be that
-	 * caused by the impact itself. A separate event will be triggered when the explosion occurs.<br>
-	 * <strong>Will be removed in the next SEMVER MAJOR</strong>
-	 */
-	public void setImpactDamage(double impactDamage) {
-		this.finalDamage -= this.impactDamage;
-		this.impactDamage = impactDamage;
-		this.finalDamage += impactDamage;
+		return this.impactDamage;
 	}
 	
 	/**
-	 * Get the final damage caused by the explosive impact. This damage originates from the
-	 * impact <strong>ONLY</strong>.
+	 * Set the new damage value caused by the impact <strong>only</strong>. This new value will be propagated
+	 * to the {@link ExplosiveDamageEvent}, where it will be combined with the explosion damage
+	 * and applied to the player.
 	 * 
-	 * @return The final damage done to the player due to the explosive impact.
-	 * 
-	 * @since 0.8.0
-	 */
-	public double getFinalDamage() {
-		return this.finalDamage;
-	}
-	
-	/**
-	 * Set the final damage which is caused by the explosive impact. This value originates
-	 * from the impact <strong>ONLY</strong>.
-	 * 
-	 * @param damage The new final damage value.
+	 * @param damage The new damage value of the impact.
 	 * 
 	 * @since 0.8.0
 	 */
-	public void setFinalDamage(double damage) {
-		this.finalDamage = damage;
+	public void setImpactDamage(double damage) {
+		this.impactDamage = damage;
 	}
 	
 	/**

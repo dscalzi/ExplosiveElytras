@@ -30,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.FireworkMeta;
 
+import com.dscalzi.explosiveelytras.api.event.ExplosiveDamageEvent;
 import com.dscalzi.explosiveelytras.api.event.ExplosiveImpactEvent;
 import com.dscalzi.explosiveelytras.api.event.ExplosiveImpactEvent.ImpactType;
 import com.dscalzi.explosiveelytras.managers.ConfigManager;
@@ -39,7 +40,7 @@ public class MainListener implements Listener{
 	private final ExplosiveElytras plugin;
 	private final ConfigManager cm;
 	private Map<UUID, Long> cache = new HashMap<UUID, Long>();
-	private Map<UUID, Double> damageCache = new HashMap<UUID, Double>();
+	private Map<UUID, Pair<ExplosiveImpactEvent, Double>> damageCache = new HashMap<UUID, Pair<ExplosiveImpactEvent, Double>>();
 	
 	public MainListener(ExplosiveElytras plugin){
 		cm = ConfigManager.getInstance();
@@ -60,8 +61,14 @@ public class MainListener implements Listener{
 			// Assures our custom death message is sent.
 			if(e.getCause() == DamageCause.BLOCK_EXPLOSION) {
 				if(damageCache.containsKey(p.getUniqueId())) {
-					e.setDamage(e.getFinalDamage() + damageCache.get(p.getUniqueId()));
+					ExplosiveDamageEvent event = new ExplosiveDamageEvent(p, e.getFinalDamage(), damageCache.get(p.getUniqueId()).getValue(), damageCache.get(p.getUniqueId()).getKey());
+					//e.setDamage(e.getFinalDamage() + damageCache.get(p.getUniqueId()).getValue());
 					damageCache.remove(p.getUniqueId());
+					Bukkit.getServer().getPluginManager().callEvent(event);
+					if(event.isCancelled()) {
+						return;
+					}
+					e.setDamage(event.getEffectiveDamage());
 				}
 				return;
 			}
@@ -193,7 +200,8 @@ public class MainListener implements Listener{
 			consumed = event.getConsumedItems();
 			if(cm.consumeRequiredItems()) consumed.forEach(i -> removeItem(i, inv));
 			cache.put(p.getUniqueId(), System.currentTimeMillis());
-			damageCache.put(p.getUniqueId(), event.getFinalDamage());
+			damageCache.put(p.getUniqueId(), new Pair<ExplosiveImpactEvent, Double>(event, event.getImpactDamage()));
+			//damageCache.put(p.getUniqueId(), event.getImpactDamage());
 			p.getWorld().createExplosion(event.getLocation().getX(), event.getLocation().getY(), event.getLocation().getZ(), event.getExplosionPower(), event.getSetFire(), event.getBreakBlocks());
 			if(cm.fireworksOnExplosion() && event.hasFirework()) {
 				event.getFirework().detonate();
