@@ -107,7 +107,7 @@ public class ExplosiveDamageEvent extends Event implements Cancellable {
 	/**
 	 * Returns a snapshot of the ExplosiveImpactEvent which triggered this event.
 	 * This value should not be modified, as it will have no effect at this point.
-	 * The object is provided simply to give assurances to api developers.
+	 * The object is provided simply to give assurances to API developers.
 	 * 
 	 * @return The ExplosiveImpactEvent which triggered this event.
 	 * 

@@ -35,7 +35,7 @@ import com.dscalzi.explosiveelytras.api.event.ExplosiveImpactEvent;
 import com.dscalzi.explosiveelytras.api.event.ExplosiveImpactEvent.ImpactType;
 import com.dscalzi.explosiveelytras.managers.ConfigManager;
 
-public class MainListener implements Listener{
+public class MainListener implements Listener {
 
 	private final ExplosiveElytras plugin;
 	private final ConfigManager cm;
@@ -62,7 +62,6 @@ public class MainListener implements Listener{
 			if(e.getCause() == DamageCause.BLOCK_EXPLOSION) {
 				if(damageCache.containsKey(p.getUniqueId())) {
 					ExplosiveDamageEvent event = new ExplosiveDamageEvent(p, e.getFinalDamage(), damageCache.get(p.getUniqueId()).getValue(), damageCache.get(p.getUniqueId()).getKey());
-					//e.setDamage(e.getFinalDamage() + damageCache.get(p.getUniqueId()).getValue());
 					damageCache.remove(p.getUniqueId());
 					Bukkit.getServer().getPluginManager().callEvent(event);
 					if(event.isCancelled()) {
