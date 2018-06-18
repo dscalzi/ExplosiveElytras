@@ -12,10 +12,11 @@ general_settings:
   # A player must have at least one of the following
   # in their inventory at the time of crash in order
   # to explode. Leave this empty for no requirement.
-  # Syntax is [id]:[data]|[amount]
-  # Ex. 46:0|1 = 1 tnt, 289:0|64 = 64 gunpowder
+  # Syntax is [MATERIAL]|[amount]
+  # Ex. TNT|1 = 1 tnt, SULPHUR|64 = 64 gunpowder
+  # List of spigot materials: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
   required_items:
-    - "46:0|1"
+    - "TNT|1"
     
   # The power of the explosion per required item found.
   # This will be the total power of the explosion if

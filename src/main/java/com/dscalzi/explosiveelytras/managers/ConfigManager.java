@@ -10,6 +10,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -77,17 +78,21 @@ public class ConfigManager {
 		return this.config.getStringList("general_settings.allowed_worlds");
 	}
 	
-	@SuppressWarnings("deprecation")
 	public List<ItemStack> getRequiredItems(){
 		@SuppressWarnings("unchecked")
 		List<String> stuff = (List<String>) config.getList("general_settings.required_items", new ArrayList<String>());
 		List<ItemStack> ret = new ArrayList<ItemStack>();
 		for(String s : stuff){
 			String[] parts = s.split("\\|");
-			String[] ids = parts[0].split(":");
-			ItemStack i = ids.length >= 2 ? new ItemStack(Integer.parseInt(ids[0]), Integer.parseInt(ids[1])) : new ItemStack(Integer.parseInt(ids[0]));
-			i.setAmount(Integer.parseInt(parts[1]));
-			ret.add(i);
+			try {
+				
+				Material m = Material.valueOf(parts[0]);
+				ItemStack i = new ItemStack(m, Integer.parseInt(parts[1]));
+				ret.add(i);
+				
+			} catch (Exception e) {
+				plugin.getLogger().severe("Unknown item in required items list: " + stuff);
+			}
 		}
 		return ret;
 	}
