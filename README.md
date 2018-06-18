@@ -86,32 +86,73 @@ dependencies {
 ### Example Usage
 
 ```java
-/**
-* Example listener.
-* 
-* This listener will parse through the items consumed by the
-* explosive collision. Any items with the lore "Ancient Protection"
-* will be removed from the consumed list and will therefore be
-* preserved.
-*/
-@EventHandler
-public void onExplosiveImpact(ExplosiveImpactEvent e) {
-	List<ItemStack> consumedItems = e.getConsumedItems();
-	itemLoop:
-	for(int i=0; i<consumedItems.size(); i++) {
-		ItemStack target = consumedItems.get(i);
-		if(target.hasItemMeta()) {
-			ItemMeta targetMeta = target.getItemMeta();
-			if(targetMeta.hasLore()) {
-				for(final String s : targetMeta.getLore()) {
-					if(s.equals("Ancient Protection")) {
-						consumedItems.remove(i);
-						continue itemLoop;
-					}
-				}
-			}
-		}
-	}
+public class ExampleListener implements Listener {
+
+    private final Map<UUID, ExplosiveImpactEvent> EVENT_CACHE = new HashMap<UUID, ExplosiveImpactEvent>();
+
+    @EventHandler
+    public void onExplosiveImpact(ExplosiveImpactEvent e) {
+
+        // Do not consume items with a certain lore.
+        List<ItemStack> consumedItems = e.getConsumedItems();
+        for (int i = 0; i < consumedItems.size(); i++) {
+            ItemStack target = consumedItems.get(i);
+            if (target.hasItemMeta()) {
+                ItemMeta targetMeta = target.getItemMeta();
+                if (targetMeta.hasLore()) {
+                    loreLoop: for (final String s : targetMeta.getLore()) {
+                        if (s.equals("Ancient Protection")) {
+
+                            // Do not consume items with Ancient Protection.
+                            consumedItems.remove(i);
+                            break loreLoop;
+
+                        }
+                    }
+                }
+            }
+        }
+
+        // Do not deal damage if the player has armor with
+        // a certain lore.
+        final Player p = e.getPlayer();
+        itemLoop: for (ItemStack i : p.getInventory().getArmorContents()) {
+            if (i.hasItemMeta()) {
+                ItemMeta targetMeta = i.getItemMeta();
+                if (targetMeta.hasLore()) {
+                    for (final String s : targetMeta.getLore()) {
+                        if (s.equals("Guardian Blessing")) {
+
+                            // Do not do damage to players with a Guardian Blessing.
+                            // We cache this event because damage can only be edited
+                            // through the ExplosiveDamageEvent.
+                            EVENT_CACHE.put(p.getUniqueId(), e);
+                            break itemLoop;
+
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    @EventHandler
+    public void onExplosiveDamage(ExplosiveDamageEvent e) {
+
+        final Player p = e.getPlayer();
+        if (EVENT_CACHE.containsKey(p.getUniqueId())) {
+
+            // Cached events do not do damage. See above method.
+            e.setExplosionDamage(0);
+            e.setImpactDamage(0);
+
+            EVENT_CACHE.remove(p.getUniqueId());
+
+        }
+
+    }
+
 }
 ```
 
