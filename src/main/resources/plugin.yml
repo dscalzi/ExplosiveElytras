@@ -2,8 +2,9 @@ author: Daniel Scalzi
 description: High speed elytra collisions cause explosions.
 main: com.dscalzi.explosiveelytras.ExplosiveElytras
 name: ExplosiveElytras
+api-version: 1.13
 softdepend: [WorldGuard]
-version: 0.10.0
+version: 0.10.1
 commands:
   explosiveelytras:
     description: Main plugin command.

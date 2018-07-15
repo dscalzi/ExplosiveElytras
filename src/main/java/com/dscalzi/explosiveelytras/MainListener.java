@@ -207,7 +207,6 @@ public class MainListener implements Listener {
                 consumed.forEach(i -> removeItem(i, inv));
             cache.put(p.getUniqueId(), System.currentTimeMillis());
             damageCache.put(p.getUniqueId(), new Pair<ExplosiveImpactEvent, Double>(event, event.getImpactDamage()));
-            // damageCache.put(p.getUniqueId(), event.getImpactDamage());
             p.getWorld().createExplosion(event.getLocation().getX(), event.getLocation().getY(),
                     event.getLocation().getZ(), event.getExplosionPower(), event.getSetFire(), event.getBreakBlocks());
             if (cm.fireworksOnExplosion() && event.hasFirework()) {

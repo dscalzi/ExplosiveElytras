@@ -1,6 +1,6 @@
 ![Logo](https://i.imgur.com/PQAl7si.png)
 
-[<img src="https://ci.appveyor.com/api/projects/status/v982bn9k4lbgfu3s?retina=true" height="20.74px"></img>](https://ci.appveyor.com/project/dscalzi/explosiveelytras) [![](https://img.shields.io/github/license/dscalzi/ExplosiveElytras.svg)](https://github.com/dscalzi/ExplosiveElytras/blob/master/LICENSE) ![](https://img.shields.io/badge/Spigot-1.9.x--1.12.x-orange.svg) ![](https://img.shields.io/badge/Java-8+-ec2025.svg) [![](https://discordapp.com/api/guilds/211524927831015424/widget.png)](https://discordapp.com/invite/Fcrh6PT)
+[<img src="https://ci.appveyor.com/api/projects/status/v982bn9k4lbgfu3s?retina=true" height="20.74px"></img>](https://ci.appveyor.com/project/dscalzi/explosiveelytras) [![](https://img.shields.io/github/license/dscalzi/ExplosiveElytras.svg)](https://github.com/dscalzi/ExplosiveElytras/blob/master/LICENSE) ![](https://img.shields.io/badge/Spigot-1.9.x--1.13.x-orange.svg) ![](https://img.shields.io/badge/Java-8+-ec2025.svg) [![](https://discordapp.com/api/guilds/211524927831015424/widget.png)](https://discordapp.com/invite/Fcrh6PT)
 
 ExplosiveElytras is a light-weight plugin built using the Spigot API. This plugin causes explosions to occur when a player impacts an object at a high velocity. These explosions only occur if the player has a certain item in their inventory, such as tnt. This plugin is highly configurable, allowing you to customize the conditions which trigger explosions.
 

@@ -86,8 +86,8 @@ public class ConfigManager {
         for (String s : stuff) {
             String[] parts = s.split("\\|");
             try {
-
-                Material m = Material.valueOf(parts[0]);
+                
+                Material m = Material.getMaterial(parts[0]);
                 ItemStack i = new ItemStack(m, Integer.parseInt(parts[1]));
                 ret.add(i);
 

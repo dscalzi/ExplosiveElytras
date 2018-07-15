@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.dscalzi</groupId>
   <artifactId>ExplosiveElytras</artifactId>
-  <version>0.10.0</version>
+  <version>0.10.1</version>
   <name>ExplosiveElytras</name>
   <description>High speed elytra collisions cause explosions.</description>
   <url>https://github.com/dscalzi/ExplosiveElytras</url>
