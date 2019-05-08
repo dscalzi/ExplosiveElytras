@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.dscalzi</groupId>
   <artifactId>ExplosiveElytras</artifactId>
-  <version>0.10.1</version>
+  <version>0.10.2</version>
   <name>ExplosiveElytras</name>
   <description>High speed elytra collisions cause explosions.</description>
   <url>https://github.com/dscalzi/ExplosiveElytras</url>
@@ -42,7 +42,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
+        <version>3.8.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -66,7 +66,7 @@
       <plugin>
 	    <groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-javadoc-plugin</artifactId>
-		<version>3.0.1</version>
+		<version>3.1.0</version>
 		<executions>
 		  <execution>
 		    <id>attach-javadocs</id>
@@ -80,7 +80,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.1</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -137,13 +137,13 @@
     <dependency>
         <groupId>org.spigotmc</groupId>
         <artifactId>spigot-api</artifactId>
-        <version>1.12.2-R0.1-SNAPSHOT</version>
+        <version>1.14-R0.1-SNAPSHOT</version>
         <scope>provided</scope>
      </dependency>
      <dependency>
   		<groupId>org.bstats</groupId>
  		<artifactId>bstats-bukkit-lite</artifactId>
-  		<version>1.2</version>
+  		<version>1.4</version>
 	</dependency>
 	<dependency>
         <groupId>com.sk89q</groupId>
