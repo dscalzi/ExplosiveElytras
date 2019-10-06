@@ -6,6 +6,7 @@
 package com.dscalzi.explosiveelytras;
 
 import org.bstats.bukkit.MetricsLite;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.dscalzi.explosiveelytras.managers.ConfigManager;
@@ -29,7 +30,27 @@ public class ExplosiveElytras extends JavaPlugin {
     }
 
     public boolean usingWorldGuard() {
-        return getServer().getPluginManager().getPlugin("WorldGuard") != null;
+        Plugin wg = getServer().getPluginManager().getPlugin("WorldGuard");
+        if(wg == null) {
+            return false;
+        }
+        String version = wg.getDescription().getVersion();
+        try {
+            final int wgMajor = Integer.parseInt(version.split("\\.")[0]);
+            if(wgMajor >= 7){
+                return true;
+            } else {
+                getLogger().warning("ExplosiveElytras only supports WorldGuard 7+, you are running version " + version);
+                getLogger().warning("WorldGuard integration will be unavailable.");
+                getLogger().warning("Please upgrade your server or revert to ExplosiveElytras v0.10.2");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            getLogger().severe("WorldGuard Version " + wg.getDescription().getVersion());
+            getLogger().severe("FAILED TO READ WORLDGUARD VERSION, SHUTTING DOWN!");
+            this.getPluginLoader().disablePlugin(this);
+            return true;
+        }
     }
 
 }
