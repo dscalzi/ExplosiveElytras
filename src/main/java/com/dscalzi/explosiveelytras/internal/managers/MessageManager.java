@@ -1,9 +1,9 @@
 /*
  * ExplosiveElytras
- * Copyright (C) 2017-2018 Daniel D. Scalzi
+ * Copyright (C) 2017-2019 Daniel D. Scalzi
  * See LICENSE for license information.
  */
-package com.dscalzi.explosiveelytras.managers;
+package com.dscalzi.explosiveelytras.internal.managers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.dscalzi.explosiveelytras.ExplosiveElytras;
+import com.dscalzi.explosiveelytras.internal.ExplosiveElytrasPlugin;
 
 public class MessageManager {
 
@@ -19,7 +19,7 @@ public class MessageManager {
     private static MessageManager instance;
     private static final char b = (char) 8226;
 
-    private ExplosiveElytras plugin;
+    private ExplosiveElytrasPlugin plugin;
     private final String prefix;
     private final ChatColor cPrimary;
     private final ChatColor cTrim;
@@ -27,7 +27,7 @@ public class MessageManager {
     private final ChatColor cSuccess;
     private final ChatColor cError;
 
-    private MessageManager(ExplosiveElytras plugin) {
+    private MessageManager(ExplosiveElytrasPlugin plugin) {
         this.plugin = plugin;
         this.cPrimary = ChatColor.GRAY;
         this.cTrim = ChatColor.DARK_RED;
@@ -40,7 +40,7 @@ public class MessageManager {
         this.plugin.getLogger().info(plugin.getDescription().getName() + " is loading.");
     }
 
-    public static void initialize(ExplosiveElytras plugin) {
+    public static void initialize(ExplosiveElytrasPlugin plugin) {
         if (!initialized) {
             instance = new MessageManager(plugin);
             initialized = true;

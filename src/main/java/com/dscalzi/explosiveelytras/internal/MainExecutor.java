@@ -1,9 +1,9 @@
 /*
  * ExplosiveElytras
- * Copyright (C) 2017-2018 Daniel D. Scalzi
+ * Copyright (C) 2017-2019 Daniel D. Scalzi
  * See LICENSE for license information.
  */
-package com.dscalzi.explosiveelytras;
+package com.dscalzi.explosiveelytras.internal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-import com.dscalzi.explosiveelytras.managers.ConfigManager;
-import com.dscalzi.explosiveelytras.managers.MessageManager;
+import com.dscalzi.explosiveelytras.internal.managers.ConfigManager;
+import com.dscalzi.explosiveelytras.internal.managers.MessageManager;
 
 public class MainExecutor implements CommandExecutor, TabCompleter {
 

@@ -1,18 +1,18 @@
 /*
  * ExplosiveElytras
- * Copyright (C) 2017-2018 Daniel D. Scalzi
+ * Copyright (C) 2017-2019 Daniel D. Scalzi
  * See LICENSE for license information.
  */
-package com.dscalzi.explosiveelytras;
+package com.dscalzi.explosiveelytras.internal;
 
 import org.bstats.bukkit.MetricsLite;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.dscalzi.explosiveelytras.managers.ConfigManager;
-import com.dscalzi.explosiveelytras.managers.MessageManager;
+import com.dscalzi.explosiveelytras.internal.managers.ConfigManager;
+import com.dscalzi.explosiveelytras.internal.managers.MessageManager;
 
-public class ExplosiveElytras extends JavaPlugin {
+public class ExplosiveElytrasPlugin extends JavaPlugin {
 
     @SuppressWarnings("unused")
     private MetricsLite metrics;

@@ -1,9 +1,9 @@
 /*
  * ExplosiveElytras
- * Copyright (C) 2017-2018 Daniel D. Scalzi
+ * Copyright (C) 2017-2019 Daniel D. Scalzi
  * See LICENSE for license information.
  */
-package com.dscalzi.explosiveelytras.managers;
+package com.dscalzi.explosiveelytras.internal.managers;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -14,7 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import com.dscalzi.explosiveelytras.ExplosiveElytras;
+import com.dscalzi.explosiveelytras.internal.ExplosiveElytrasPlugin;
 
 public class ConfigManager {
 
@@ -23,10 +23,10 @@ public class ConfigManager {
 
     // TODO Will be implemented in a later version
     private final double configVersion = 1.0;
-    private ExplosiveElytras plugin;
+    private ExplosiveElytrasPlugin plugin;
     private FileConfiguration config;
 
-    private ConfigManager(ExplosiveElytras plugin) {
+    private ConfigManager(ExplosiveElytrasPlugin plugin) {
         this.plugin = plugin;
         loadConfig();
     }
@@ -44,7 +44,7 @@ public class ConfigManager {
         }
     }
 
-    public static void initialize(ExplosiveElytras plugin) {
+    public static void initialize(ExplosiveElytrasPlugin plugin) {
         if (!initialized) {
             instance = new ConfigManager(plugin);
             initialized = true;

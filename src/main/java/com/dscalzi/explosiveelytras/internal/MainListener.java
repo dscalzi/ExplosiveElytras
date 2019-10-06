@@ -1,9 +1,9 @@
 /*
  * ExplosiveElytras
- * Copyright (C) 2017-2018 Daniel D. Scalzi
+ * Copyright (C) 2017-2019 Daniel D. Scalzi
  * See LICENSE for license information.
  */
-package com.dscalzi.explosiveelytras;
+package com.dscalzi.explosiveelytras.internal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,16 +33,16 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import com.dscalzi.explosiveelytras.api.event.ExplosiveDamageEvent;
 import com.dscalzi.explosiveelytras.api.event.ExplosiveImpactEvent;
 import com.dscalzi.explosiveelytras.api.event.ExplosiveImpactEvent.ImpactType;
-import com.dscalzi.explosiveelytras.managers.ConfigManager;
+import com.dscalzi.explosiveelytras.internal.managers.ConfigManager;
 
 public class MainListener implements Listener {
 
-    private final ExplosiveElytras plugin;
+    private final ExplosiveElytrasPlugin plugin;
     private final ConfigManager cm;
-    private Map<UUID, Long> cache = new HashMap<UUID, Long>();
-    private Map<UUID, Pair<ExplosiveImpactEvent, Double>> damageCache = new HashMap<UUID, Pair<ExplosiveImpactEvent, Double>>();
+    private Map<UUID, Long> cache = new HashMap<>();
+    private Map<UUID, Pair<ExplosiveImpactEvent, Double>> damageCache = new HashMap<>();
 
-    public MainListener(ExplosiveElytras plugin) {
+    public MainListener(ExplosiveElytrasPlugin plugin) {
         cm = ConfigManager.getInstance();
         this.plugin = plugin;
     }
@@ -122,13 +122,13 @@ public class MainListener implements Listener {
 
             final PlayerInventory inv = p.getInventory();
             final List<ItemStack> requirements = cm.getRequiredItems();
-            List<ItemStack> consumed = new ArrayList<ItemStack>();
+            List<ItemStack> consumed = new ArrayList<>();
             float finalPower = 0;
             if (requirements.size() > 0) {
 
                 final float powerMultiplier = cm.getPowerPerItem();
                 float maxPower = cm.explosionMultiplier() ? cm.getMaxPower() : powerMultiplier;
-                List<ItemStack> matches = new ArrayList<ItemStack>();
+                List<ItemStack> matches = new ArrayList<>();
 
                 // Check for matching required items
                 // in player's inventory.
@@ -206,7 +206,7 @@ public class MainListener implements Listener {
             if (cm.consumeRequiredItems())
                 consumed.forEach(i -> removeItem(i, inv));
             cache.put(p.getUniqueId(), System.currentTimeMillis());
-            damageCache.put(p.getUniqueId(), new Pair<ExplosiveImpactEvent, Double>(event, event.getImpactDamage()));
+            damageCache.put(p.getUniqueId(), new Pair<>(event, event.getImpactDamage()));
             p.getWorld().createExplosion(event.getLocation().getX(), event.getLocation().getY(),
                     event.getLocation().getZ(), event.getExplosionPower(), event.getSetFire(), event.getBreakBlocks());
             if (cm.fireworksOnExplosion() && event.hasFirework()) {
@@ -274,9 +274,8 @@ public class MainListener implements Listener {
         if (requestedDeletion > 0) {
             if (_inv.getItemInOffHand().isSimilar(item)) {
                 ItemStack reduced = _inv.getItemInOffHand();
-                int reducedNumber = reduced.getAmount() - requestedDeletion <= 0 ? 0
-                        : reduced.getAmount() - requestedDeletion;
-                requestedDeletion -= item.getAmount() <= 0 ? 0 : item.getAmount();
+                int reducedNumber = Math.max(0, reduced.getAmount() - requestedDeletion);
+                requestedDeletion -= Math.max(0, item.getAmount());
                 reduced.setAmount(reducedNumber);
                 _inv.setItemInOffHand(reduced);
             }
@@ -286,8 +285,8 @@ public class MainListener implements Listener {
             for (int z = 0; z < _inv.getArmorContents().length; ++z) {
                 ItemStack i = _inv.getArmorContents()[z];
                 if (i != null && i.isSimilar(item)) {
-                    int reducedNumber = i.getAmount() - requestedDeletion <= 0 ? 0 : i.getAmount() - requestedDeletion;
-                    requestedDeletion -= item.getAmount() <= 0 ? 0 : item.getAmount();
+                    int reducedNumber = Math.max(0, i.getAmount() - requestedDeletion);
+                    requestedDeletion -= Math.max(0, item.getAmount());
                     i.setAmount(reducedNumber);
                     aC[z] = i;
                     if (requestedDeletion <= 0)
