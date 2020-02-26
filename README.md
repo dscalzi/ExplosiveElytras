@@ -26,7 +26,7 @@ A Developer API is provided and actively maintained. More details on this are pr
 * Configurable values for both vertical and horizontal impacts:
     * Set a minimum damage value required to trigger explosions.
 * Enable/disable fireworks on explosion.
-* Metrics by [bStats](https://bstats.org/plugin/bukkit/ExplosiveElytras)
+* Metrics by [bStats](https://bstats.org/plugin/bukkit/ExplosiveElytras/416)
 * WorldGuard Integration (WorldGuard 7+ Only)
 * Developer API with Maven and Gradle support.
 
@@ -79,7 +79,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.dscalzi:ExplosiveElytras:VERSION'
+    implementation 'com.dscalzi:ExplosiveElytras:VERSION'
 }
 ```
 

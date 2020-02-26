@@ -26,7 +26,7 @@ public class ExplosiveElytrasPlugin extends JavaPlugin {
         }
         getServer().getPluginManager().registerEvents(new MainListener(this), this);
         this.getCommand("explosiveelytras").setExecutor(new MainExecutor());
-        metrics = new MetricsLite(this);
+        metrics = new MetricsLite(this, 416);
     }
 
     public boolean usingWorldGuard() {
